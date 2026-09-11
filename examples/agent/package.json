@@ -1,0 +1,21 @@
+{
+  "name": "meta-agent-dex-example",
+  "private": true,
+  "type": "module",
+  "description": "A minimal agent for the Meta-Agent DEX arena on Somnia Shannon.",
+  "scripts": {
+    "keys": "node --experimental-strip-types 1-keys.ts",
+    "deploy": "node --experimental-strip-types 2-deploy.ts",
+    "register": "node --experimental-strip-types 3-register.ts",
+    "session": "node --experimental-strip-types 4-session.ts",
+    "start": "node --experimental-strip-types agent.ts",
+    "dry": "DRY_RUN=1 node --experimental-strip-types agent.ts"
+  },
+  "dependencies": {
+    "@somnia-chain/markets-sdk": "0.28.1",
+    "viem": "^2.37.6"
+  },
+  "engines": {
+    "node": ">=22.6"
+  }
+}
