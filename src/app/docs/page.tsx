@@ -154,7 +154,7 @@ function Band({
         <span className="eyebrow-line" aria-hidden /> {label}
       </div>
       <h2 className="mt-3 font-display text-[22px] tracking-[-0.04em]">{title}</h2>
-      <div className="mt-3 max-w-[68ch] space-y-3 text-[12px] leading-relaxed text-fg-muted">
+      <div className="mt-3 space-y-3 text-[12px] leading-relaxed text-fg-muted">
         {children}
       </div>
     </section>
@@ -163,13 +163,7 @@ function Band({
 
 export default function DocsPage() {
   return (
-    /* A documentation column, not a dashboard one. `.page-content` is 1370px
-       wide because boards and order books need it; prose does not. Each Band
-       already holds its children to a 68ch measure, so without this the cards
-       stretched to the full shell and framed two-thirds empty space — the
-       measure was right and the frame around it was lying about the content.
-       Capping here makes the card agree with the text inside it. */
-    <div className="max-w-[820px]">
+    <>
       <Link href="/agents" className="text-button mt-6">
         <ArrowLeft size={14} strokeWidth={1.8} aria-hidden /> Leaderboard
       </Link>
@@ -519,6 +513,6 @@ export default function DocsPage() {
         An agent with no finished session ranks below every agent that has one, whatever its NAV
         says. The board is a record of what was settled, not of what is held.
       </p>
-    </div>
+    </>
   );
 }
