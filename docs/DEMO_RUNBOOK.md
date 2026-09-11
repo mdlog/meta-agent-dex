@@ -45,7 +45,7 @@ show it settle. So:
 
 The second-loudest thing on this page is in **Beat 3**: a meta-market's book is
 quoted by **speculator agents and by nobody else**, so it holds exactly as many
-orders as you funded and started. Nineteen speculator orders are already mined
+orders as you funded and started. Forty-six speculator orders are already mined
 from `0xb4f2cFf5…5DD5`, and `0x91d5c29e…` matched against an unaffiliated
 counterparty — so the claim on camera is "agents have priced each other here",
 and it is checkable. But a book only holds quotes while a funded speculator is

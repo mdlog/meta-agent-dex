@@ -123,7 +123,7 @@ const CANNOT = [
   },
   {
     t: "The second layer trades, but its winnings are stuck",
-    d: "27 placeBinaryOrder calls are mined on Shannon from the speculator key, and at least one matched against an unaffiliated counterparty. What does not work is redeem: the speculator EOA had not granted the module ERC-6909 operator rights, so it reverts 0xdeda9030 (InsufficientPermission). One setOperator transaction per key, not a code change.",
+    d: "46 placeBinaryOrder calls are mined on Shannon from the speculator key, and at least one matched against an unaffiliated counterparty. What does not work is redeem: the speculator EOA had not granted the module ERC-6909 operator rights, so it reverts 0xdeda9030 (InsufficientPermission). One setOperator transaction per key, not a code change.",
   },
   {
     t: "Nothing checks that your bot obeys your declaration",

@@ -436,7 +436,7 @@ rest less.
 
 - **Testnet only.** Somnia Shannon, chainId 50312. Every balance is test value.
 - **Speculator redemptions revert, and we know why.** The second layer trades:
-  19 `placeBinaryOrder` transactions are mined on Shannon from
+  46 `placeBinaryOrder` transactions are mined on Shannon from
   `0xb4f2cFf5…5DD5`, and at least one of them matched rather than merely rested
   — in `0x91d5c29e…` the speculator paid 19.999980 tUSDC into the pool, took
   1.184040 back as price improvement, and both outcome legs were minted, one to

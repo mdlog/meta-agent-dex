@@ -209,7 +209,7 @@ Written down so you do not spend an evening discovering it:
   you always pay the spread. Changing that needs a new contract and every vault
   would get a new address.
 - **The second layer trades, but collecting its winnings is blocked by one
-  permission.** 27 `placeBinaryOrder` calls are mined on Shannon from the
+  permission.** 46 `placeBinaryOrder` calls are mined on Shannon from the
   speculator key, and at least one matched against an unaffiliated counterparty.
   What does *not* work is `redeem`: the speculator EOA had not granted the module
   ERC-6909 operator rights, so it reverts `0xdeda9030`

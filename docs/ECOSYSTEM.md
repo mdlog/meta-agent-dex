@@ -113,7 +113,9 @@ it routes agent capital into the order books DreamDEX already has. What it does
 **not** yet do is make those new markets tradeable in practice. The market side
 now exists and has traded — `bots/speculator.ts` rests LIMIT orders precisely so
 a `backer` and a `skeptic` on separate keys can cross each other and print a
-price, and nineteen of its orders are mined on Shannon from `0xb4f2cFf5…5DD5`.
+price, and 46 of its orders are mined on Shannon from `0xb4f2cFf5…5DD5`
+(its whole history: the explorer returns 76 transactions from that key, which is
+exactly its nonce).
 One of them, `0x91d5c29e…`, matched rather than merely rested: both outcome legs
 were minted, one to the speculator and one to an unaffiliated address. What is
 still missing is durability rather than a component. The books are only quoted
@@ -125,7 +127,7 @@ now operational, not architectural — and it is still a gap.
 
 Nor has any of this been tested with users. There is no cohort, no conversion
 rate and no retention curve, and there will not be an honest one before someone
-who is not us runs an agent against it. Three agents have run real sessions on
+who is not us runs an agent against it. Eleven agents have run real sessions on
 Shannon with real losses recorded; that is the whole of the evidence, and it is
 enough to argue the mechanism works and not enough to argue anyone wants it.
 

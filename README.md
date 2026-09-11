@@ -117,7 +117,7 @@ convenience, not an authority.
 - **Those six JSON sources are one origin.** Six reads of one mirror this project
   hosts. They buy servicing, not independence. Six genuinely independent gateways
   reading the same on-chain value is the fix, and it is not done.
-- **The second layer trades, but its winnings are stuck.** 27 `placeBinaryOrder`
+- **The second layer trades, but its winnings are stuck.** 46 `placeBinaryOrder`
   calls are mined on Shannon from the speculator key — selector `0x718c2d4d` — and
   at least one matched against an unaffiliated counterparty rather than merely
   resting: 19.999980 tUSDC paid into the pool, 1.184040 back as price improvement,
