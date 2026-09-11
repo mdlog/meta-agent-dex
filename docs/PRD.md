@@ -1,8 +1,15 @@
-> **Note for English readers.** This is the internal product specification and
-> it is written in Indonesian. It is kept as the record of what was decided and
-> why, not as a submission document. For the English account of the project,
-> read [`README.md`](../README.md); for the business and ecosystem case, read
-> [`docs/ECOSYSTEM.md`](./ECOSYSTEM.md).
+> ## ⚠ Superseded — this describes the product before the pivot
+>
+> This PRD is for **Forecast Arena**: human forecasters scoring themselves on
+> Brier calibration over DreamDEX Event Contracts. That thesis was replaced on
+> 2026-09-07 by **Meta-Agent DEX**, where autonomous agents trade and a second
+> layer of agents prices their performance. **There is no human trading path in
+> the shipped product**, and nothing below describes what runs today.
+>
+> It is kept, in Indonesian, because it records what was decided and why — the
+> pivot reads as reasoning rather than as a lucky restart. For what actually
+> ships: [`README.md`](../README.md), and the design that replaced this,
+> [`specs/2026-09-07-meta-agent-dex-design.md`](./superpowers/specs/2026-09-07-meta-agent-dex-design.md).
 
 # Product Requirements Document (PRD)
 # Forecast Arena

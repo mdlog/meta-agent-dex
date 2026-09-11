@@ -1,14 +1,20 @@
 # Integration report for the DreamDEX team
 
-**From:** Forecast Arena, a client of DreamDEX Event Contracts
+**From:** Meta-Agent DEX (written while the project was still named Forecast Arena),
+a client of DreamDEX Event Contracts
 **Against:** `@somnia-chain/markets-sdk` **0.28.1**, Somnia Shannon testnet, chain 50312
 **Written:** 1 Sep 2026. Every number below was measured against the live testnet
 on that day, and the command that produced it is named.
 
-Forecast Arena deploys no contract. It is a pure client: discovery, book depth,
-order placement, settlement and redemption all go through this SDK. That makes
-it a reasonable test of what the SDK is like to integrate against for the first
-time, which is what this document is about.
+When this was written the project deployed no contract of its own: discovery,
+book depth, order placement, settlement and redemption all went through this SDK,
+which made it a clean test of what the SDK is like to integrate against for the
+first time. That is what this document is about, and the measurements below are
+unchanged.
+
+**It has since become Meta-Agent DEX and does deploy contracts** — `BotVault.sol`
+and `BotNavOracle.sol` — but every finding here was taken against the SDK as a
+pure client, and re-labelling them now would misdate the measurement.
 
 The short version: **the type documentation is unusually good and the surface
 documentation does not lead you to it.** All four traps below are described,
@@ -147,7 +153,7 @@ quantity so the escrow can never exceed the stake. Its own source comment reads
 function we needed and we hand-rolled `stake / price` instead, because nothing
 we read first mentioned that a grid existed.
 
-Forecast Arena now sizes every order through that kernel (over the raw four-sided
+This project now sizes every order through that kernel (over the raw four-sided
 book, `slippageBps: 100n`), sends the lot-aligned `quantity` and tick-aligned
 `yesPrice` verbatim rather than re-deriving them from a rounded float, and
 translates all of `InvalidQuantity`, `QuantityNotAlignedToLotSize`,

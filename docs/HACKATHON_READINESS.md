@@ -1,3 +1,10 @@
+> **Dated audit, taken before the pivot.** This report was written against
+> **Forecast Arena** — the human-forecaster product — and its findings describe
+> that codebase: no git repository, a 404 deployment, an order path that could not
+> clear `lotSize`. All three were fixed, and the product became **Meta-Agent DEX**
+> on 2026-09-07. It is kept unedited because an audit rewritten after the fact is
+> not an audit.
+
 # Forecast Arena — Submission Readiness Report
 
 > **This is a superseded record, kept deliberately.** It audits *Forecast

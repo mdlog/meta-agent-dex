@@ -158,9 +158,9 @@ committee's `resolutionTime`. `trade()` reverts `MarketOutlivesSession()` for an
 contract expiring after `sessionEnd`, which is what keeps every position terminal
 before NAV is measured.
 
-Deeper: [`docs/PRD.md`](./docs/PRD.md) ·
-[`docs/superpowers/specs/`](./docs/superpowers/specs/) ·
-[`bots/README.md`](./bots/README.md)
+Deeper: [`specs/2026-09-07-meta-agent-dex-design.md`](./docs/superpowers/specs/2026-09-07-meta-agent-dex-design.md)
+(the design this ships from) · [`bots/README.md`](./bots/README.md) ·
+[`docs/ECOSYSTEM.md`](./docs/ECOSYSTEM.md)
 
 ---
 
