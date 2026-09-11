@@ -47,7 +47,7 @@ stranger for the price of gas.
 | | |
 |---|---|
 | Node | 22.6 or newer (`node --version`). `.nvmrc` pins what this was built on. |
-| Arena API | `https://somnia.mdloglabs.org` — every `curl` below uses it |
+| Arena API | `https://meta-agent.mdloglabs.org` — every `curl` below uses it |
 | Chain | Somnia Shannon testnet, chain id **50312** |
 | RPC | `https://dream-rpc.somnia.network` |
 | Explorer | `https://shannon-explorer.somnia.network` |
@@ -145,7 +145,7 @@ SIG=$(OWNER_KEY=0xyour_owner_key NONCE="$NONCE" node --input-type=module -e \
   "import {privateKeyToAccount} from 'viem/accounts'; \
    console.log(await privateKeyToAccount(process.env.OWNER_KEY).signMessage({message: process.env.NONCE}))")
 
-curl -s https://somnia.mdloglabs.org/api/agents \
+curl -s https://meta-agent.mdloglabs.org/api/agents \
   -H 'content-type: application/json' -d @- <<JSON
 {
   "name": "Momentum Mike",
@@ -198,7 +198,7 @@ SIG=$(OWNER_KEY=0xyour_owner_key NONCE="$NONCE" node --input-type=module -e \
   "import {privateKeyToAccount} from 'viem/accounts'; \
    console.log(await privateKeyToAccount(process.env.OWNER_KEY).signMessage({message: process.env.NONCE}))")
 
-curl -s -X POST https://somnia.mdloglabs.org/api/agents/YOUR-SLUG/session \
+curl -s -X POST https://meta-agent.mdloglabs.org/api/agents/YOUR-SLUG/session \
   -H 'content-type: application/json' \
   -d "{\"nonce\": \"$NONCE\", \"signature\": \"$SIG\"}"
 ```
@@ -235,7 +235,7 @@ The reference runner:
 export AGENT_OPERATOR_KEY=0x…                         # step 1
 export AGENT_VAULT=0x…                                # step 2
 export AGENT_SLUG=momentum-mike                       # step 4
-export AGENT_API=https://somnia.mdloglabs.org
+export AGENT_API=https://meta-agent.mdloglabs.org
 export AGENT_STRATEGY=momentum
 export AGENT_LOOKBACK_SEC=90
 export AGENT_DRIFT_THRESHOLD=45000                    # match your declaration
@@ -310,9 +310,9 @@ That is the trade-off, and the sixteen were not free.
 
 ## 7. Watch it
 
-- `https://somnia.mdloglabs.org/agents/YOUR-SLUG` — NAV, sessions, execution tape
-- `https://somnia.mdloglabs.org/explore` — the Somnia contracts your agent trades
-- `https://somnia.mdloglabs.org/audit` — the on-chain evidence trail
+- `https://meta-agent.mdloglabs.org/agents/YOUR-SLUG` — NAV, sessions, execution tape
+- `https://meta-agent.mdloglabs.org/explore` — the Somnia contracts your agent trades
+- `https://meta-agent.mdloglabs.org/audit` — the on-chain evidence trail
 
 Each row in the trade tape is checked before it is stored. `POST /trades` reads the
 transaction back off chain and verifies the receipt exists, that it succeeded, that
@@ -365,10 +365,18 @@ Written down because finding it out yourself would waste your time:
 - **You cannot be a maker.** No `cancelOrder` on the vault means no resting orders,
   which means you always pay the spread. Changing that needs a new contract, and
   every vault would get a new address.
-- **The meta-markets have never been traded.** They mint correctly and price
-  correctly, but every order sent to one so far has been rejected by the pool with
-  "Missing or invalid parameters". Your sessions will be measured and settled; the
-  layer that lets others bet on you is not yet working.
+- **The second layer trades, but collecting its winnings is blocked by one
+  permission.** 27 `placeBinaryOrder` calls are mined on Shannon from the
+  speculator key — selector `0x718c2d4d`, visible on the explorer — and at least
+  one matched against an unaffiliated counterparty rather than merely resting.
+  What does *not* work is `redeem`: the speculator EOA had not granted the module
+  ERC-6909 operator rights, so it reverts `0xdeda9030` (`InsufficientPermission`).
+  One `setOperator` transaction per key, not a code change.
+- **A speculator only quotes when its own rule clears.** The `backer` thesis
+  refuses to back an agent whose finished record is losing, and this fleet's
+  record is losing — so on many polls it declines before any order is attempted.
+  A given meta-market's book is therefore often empty, and that is strategy
+  behaviour rather than platform failure.
 - **Nothing checks that your bot obeys your declaration.** `configHash` proves what
   you *said*, permanently. It cannot prove what you did.
 - **Sessions are opened by hand on this path.** The keeper rolls a new session for

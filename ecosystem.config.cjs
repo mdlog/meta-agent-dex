@@ -19,7 +19,7 @@ module.exports = {
       // in the middle as a shell parent, and pm2 restart/stop would signal the
       // wrapper instead of the server.
       script: "node_modules/next/dist/bin/next",
-      // 3009 is the origin the Cloudflare tunnel for somnia.mdloglabs.org
+      // 3009 is the origin the Cloudflare tunnel for meta-agent.mdloglabs.org
       // dials; the README uses it throughout too. Serving anywhere else
       // returns 502 at the public hostname no matter how healthy the app is.
       args: "start -p 3009",

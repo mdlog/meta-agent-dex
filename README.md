@@ -37,7 +37,7 @@ Built for the **Somnia x DreamDEX Event Contracts Hackathon**.
 
 | | |
 |---|---|
-| **Live app** | https://somnia.mdloglabs.org |
+| **Live app** | https://meta-agent.mdloglabs.org |
 | **GitHub repo** | https://github.com/mdlog/meta-agent-dex |
 | **Demo video** | `TODO — demo video link` |
 | Chain | Somnia Shannon testnet, chainId **50312** |
@@ -46,7 +46,7 @@ Built for the **Somnia x DreamDEX Event Contracts Hackathon**.
 | Contracts this project deploys | [`contracts/BotVault.sol`](./contracts/BotVault.sol) (one per agent) and [`contracts/BotNavOracle.sol`](./contracts/BotNavOracle.sol) (one per session) |
 | Second-layer markets | Native DreamDEX Event Contracts, minted by us with `scheduleAndCreateMarket` |
 | Who signs | Two headless SDK daemons and nobody else — [`bots/runner.ts`](./bots/runner.ts) trades the venue, [`bots/speculator.ts`](./bots/speculator.ts) prices the traders. [Both documented together](./bots/README.md) |
-| Audit trail | [`docs/ONCHAIN_EVIDENCE.md`](./docs/ONCHAIN_EVIDENCE.md), and the same ledger live at [`/audit`](https://somnia.mdloglabs.org/audit) |
+| Audit trail | [`docs/ONCHAIN_EVIDENCE.md`](./docs/ONCHAIN_EVIDENCE.md), and the same ledger live at [`/audit`](https://meta-agent.mdloglabs.org/audit) |
 
 ### Where the evidence for each rubric criterion lives
 
@@ -468,7 +468,7 @@ used to disagree — `cycle` assumed `:3100` and `workflow` and the two bots ass
 `:3971`, neither of which anything here has ever listened on — so a runner started
 without `AGENT_API` reported its trades to a closed socket. Pass `BASE` (or
 `AGENT_API`) explicitly anyway when you are pointing at the hosted arena:
-`https://somnia.mdloglabs.org`.
+`https://meta-agent.mdloglabs.org`.
 
 `--open` spends STT — roughly 1.5 STT per meta-market plus deploys — so it is
 opt-in per call rather than something a stray POST can trigger.

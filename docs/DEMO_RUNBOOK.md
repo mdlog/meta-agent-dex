@@ -156,7 +156,7 @@ Run all five. Any one of them failing changes what you film.
 **1. The app is reading Shannon, not the offline simulation.**
 
 ```bash
-curl -s https://somnia.mdloglabs.org/api/health
+curl -s https://meta-agent.mdloglabs.org/api/health
 ```
 
 You need `"mode":"live"` and `"ok":true`. If it says `"mode":"sim"`, stop —
@@ -166,12 +166,12 @@ brand itself **SIMULATED DATA**, and there is nothing worth filming.
 **2. There is at least one open session with a minted meta-market.**
 
 ```bash
-curl -s https://somnia.mdloglabs.org/api/agents/sessions | python3 -c 'import json,sys
+curl -s https://meta-agent.mdloglabs.org/api/agents/sessions | python3 -c 'import json,sys
 d=json.load(sys.stdin)
 print("open:",len(d["open"]),"finished:",len(d["recent"]))
 for e in d["open"]+d["recent"]:
     s=e["session"]
-    print(e["agent"]["name"], "| session", s["sessionNumber"], "|", s["status"], "| oracle", s["outcomeValue"], "| https://somnia.mdloglabs.org/market/" + (s["metaMarketId"] or "NONE"))'
+    print(e["agent"]["name"], "| session", s["sessionNumber"], "|", s["status"], "| oracle", s["outcomeValue"], "| https://meta-agent.mdloglabs.org/market/" + (s["metaMarketId"] or "NONE"))'
 ```
 
 You want `open: 3` and `finished:` at least 3. A row printing `NONE` is a
@@ -181,7 +181,7 @@ session whose mint failed — do not film that agent's card.
 Take a `finished` row's market URL from check 2 and read the chain's own view:
 
 ```bash
-curl -s https://somnia.mdloglabs.org/api/markets/<MARKET_ID> \
+curl -s https://meta-agent.mdloglabs.org/api/markets/<MARKET_ID> \
 | python3 -c 'import json,sys; print(json.load(sys.stdin)["onchain"])'
 ```
 
@@ -193,7 +193,7 @@ the committee has not answered yet — wait ten minutes and re-run.
 **4. Pick the agent you will film in Beat 4, and check its tape is not empty.**
 
 ```bash
-curl -s https://somnia.mdloglabs.org/api/agents/alpha-z \
+curl -s https://meta-agent.mdloglabs.org/api/agents/alpha-z \
 | python3 -c 'import json,sys; d=json.load(sys.stdin); print(len(d["trades"]),"trades on session",d["tradesSessionId"])'
 ```
 
@@ -205,7 +205,7 @@ that session's window; wait for the next session round.
 which version of Beat 3 you film, and it is the check most likely to fail.
 
 ```bash
-curl -s https://somnia.mdloglabs.org/api/markets/<OPEN_META_MARKET_ID> \
+curl -s https://meta-agent.mdloglabs.org/api/markets/<OPEN_META_MARKET_ID> \
 | python3 -c 'import json,sys; b=json.load(sys.stdin).get("book") or {}; print("up bids", len(b.get("upBids",[])), "| up asks", len(b.get("upAsks",[])))'
 ```
 
@@ -226,7 +226,7 @@ wider; below that the agent table drops columns.
 
 ### Beat 1 — 0:00–0:18 — what this is
 
-**On screen:** `https://somnia.mdloglabs.org/`
+**On screen:** `https://meta-agent.mdloglabs.org/`
 
 The hero reads **"Back the agents that leave a trail."** The thing doing the
 backing is a process called `backer`, running in terminal 6 since T-120 — say so

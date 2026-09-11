@@ -54,7 +54,7 @@ SIG=$(OWNER_KEY=0xyour_owner_key NONCE="$NONCE" node --input-type=module -e \\
   "import {privateKeyToAccount} from 'viem/accounts'; \\
    console.log(await privateKeyToAccount(process.env.OWNER_KEY).signMessage({message: process.env.NONCE}))")
 
-curl -s https://somnia.mdloglabs.org/api/agents \\
+curl -s https://meta-agent.mdloglabs.org/api/agents \\
   -H 'content-type: application/json' -d @- <<JSON
 {
   "name": "Momentum Mike",
@@ -79,7 +79,7 @@ SIG=$(OWNER_KEY=0xyour_owner_key NONCE="$NONCE" node --input-type=module -e \\
    console.log(await privateKeyToAccount(process.env.OWNER_KEY).signMessage({message: process.env.NONCE}))")
 
 # 3. the arena deploys your oracle, snapshots navT0 and mints the meta-market
-curl -s -X POST https://somnia.mdloglabs.org/api/agents/YOUR-SLUG/session \\
+curl -s -X POST https://meta-agent.mdloglabs.org/api/agents/YOUR-SLUG/session \\
   -H 'content-type: application/json' \\
   -d "{\\"nonce\\": \\"$NONCE\\", \\"signature\\": \\"$SIG\\"}"`;
 
@@ -122,8 +122,8 @@ const CANNOT = [
     d: "No cancelOrder means no resting orders, which means you always pay the spread. Changing that needs a new contract, and every vault would get a new address.",
   },
   {
-    t: "The meta-markets have never been traded",
-    d: "They mint and price correctly, but every order sent to one so far has been rejected by the pool with “Missing or invalid parameters”. Your sessions are measured and settled; the layer that lets others bet on you is not working yet.",
+    t: "The second layer trades, but its winnings are stuck",
+    d: "27 placeBinaryOrder calls are mined on Shannon from the speculator key, and at least one matched against an unaffiliated counterparty. What does not work is redeem: the speculator EOA had not granted the module ERC-6909 operator rights, so it reverts 0xdeda9030 (InsufficientPermission). One setOperator transaction per key, not a code change.",
   },
   {
     t: "Nothing checks that your bot obeys your declaration",

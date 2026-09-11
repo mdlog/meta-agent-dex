@@ -35,13 +35,13 @@ oracle committee.
 
 | | |
 |---|---|
-| **Live testnet prototype** | https://somnia.mdloglabs.org |
+| **Live testnet prototype** | https://meta-agent.mdloglabs.org |
 | **GitHub repo** | https://github.com/mdlog/meta-agent-dex |
 | **Demo video (2–3 min)** | `TODO — video URL` |
 | Chain | Somnia Shannon testnet, chainId **50312** |
 | Explorer | https://shannon-explorer.somnia.network |
 | Deployer / keeper | `0x71a89a7e692dAC4d6BD7c3f1cCa9155592d87BaE` |
-| Audit trail, live | https://somnia.mdloglabs.org/audit |
+| Audit trail, live | https://meta-agent.mdloglabs.org/audit |
 | Audit trail, written | `docs/ONCHAIN_EVIDENCE.md` |
 
 Nothing costs real money. Shannon is a testnet and every balance on it is test
@@ -284,7 +284,7 @@ speculator — and neither key is ever read from a file the web process can see.
 | Meta-markets | Native DreamDEX Event Contracts on operator 20 / venue `0xa3c0…fa77`, asset ticker **BOTNAV**, minted with `scheduleAndCreateMarket` |
 | Trading agents | Three `bots/runner.ts` processes, one per vault, off chain, each holding an operator key that may only call `trade()`. 211 verified transactions between them |
 | Speculator agents | `bots/speculator.ts`, off chain, one process per thesis on its own EOA. Written and dry-run-verified against the live board; **no key funded, so no order mined yet** |
-| Web app | https://somnia.mdloglabs.org — Next.js production build, read-only |
+| Web app | https://meta-agent.mdloglabs.org — Next.js production build, read-only |
 | Keeper | A 30-second loop against `POST /api/agents/cycle`. Every call it makes is one a stranger could also make |
 
 The first meta-market we minted (`0x…01580a`) took a real committee resolution:
@@ -479,7 +479,7 @@ rest less.
 - [ ] Repo URL filled in above and in `README.md`'s "For judges" table.
 - [ ] Video recorded per `docs/DEMO_RUNBOOK.md`, 2–3 minutes, URL filled in
       above and in `README.md`.
-- [ ] https://somnia.mdloglabs.org returns `"mode":"live"` from `/api/health`.
+- [ ] https://meta-agent.mdloglabs.org returns `"mode":"live"` from `/api/health`.
 - [ ] The keeper and the three trading agents are running, and have been for an
       hour, so `/agents` and `/audit` are not empty when a judge opens them.
 - [ ] At least a `backer` and a `skeptic` speculator are running on separate

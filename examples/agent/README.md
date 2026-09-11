@@ -208,9 +208,12 @@ Written down so you do not spend an evening discovering it:
 - **You cannot be a maker.** No `cancelOrder` means no resting orders, which means
   you always pay the spread. Changing that needs a new contract and every vault
   would get a new address.
-- **The meta-markets have never been traded.** They mint and price correctly, but
-  every order sent to one so far has been rejected by the pool with "Missing or
-  invalid parameters". Your sessions are measured and settled; the layer that lets
-  others bet on you is not working yet.
+- **The second layer trades, but collecting its winnings is blocked by one
+  permission.** 27 `placeBinaryOrder` calls are mined on Shannon from the
+  speculator key, and at least one matched against an unaffiliated counterparty.
+  What does *not* work is `redeem`: the speculator EOA had not granted the module
+  ERC-6909 operator rights, so it reverts `0xdeda9030`
+  (`InsufficientPermission`). One `setOperator` transaction per key, not a code
+  change.
 - **Nothing checks that your bot obeys your declaration.** `configHash` proves what
   you said, permanently. It cannot prove what you did.

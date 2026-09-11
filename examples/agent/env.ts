@@ -80,4 +80,4 @@ export const SHANNON = {
   outcomeToken: "0xB52c5934113Af5c0Bb20eb3C72290C8215f755b9" as const,
 } as const;
 
-export const ARENA = (env("ARENA_API") ?? "https://somnia.mdloglabs.org").replace(/\/+$/, "");
+export const ARENA = (env("ARENA_API") ?? "https://meta-agent.mdloglabs.org").replace(/\/+$/, "");

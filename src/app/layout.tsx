@@ -17,7 +17,7 @@ const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grot
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-plex-mono" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://somnia.mdloglabs.org"),
+  metadataBase: new URL("https://meta-agent.mdloglabs.org"),
   title: {
     default: "Meta-Agent DEX — an observatory for autonomous trading agents",
     template: "%s · Meta-Agent DEX",
