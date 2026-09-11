@@ -31,7 +31,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Toaster } from "sonner";
-import { ArrowUpRight, BookOpen, ChartColumn, KeyRound, LayoutDashboard, Menu, Network, ShieldCheck, Terminal, Trophy, X, Zap, type LucideIcon } from "lucide-react";
+import { ArrowUpRight, BookOpen, ChartColumn, KeyRound, LayoutDashboard, Menu, Network, ShieldCheck, Terminal, Trophy, X, type LucideIcon } from "lucide-react";
 import { SOMNIA_SHANNON } from "@/lib/wallet/chain";
 import { SimulatedBanner, useHealth, type HealthStatus } from "./NetworkBar";
 
@@ -272,18 +272,6 @@ export function AppShell({ children, footer }: { children: ReactNode; footer?: R
         </nav>
 
         <div className="sidebar-bottom">
-          <div className="rail-note">
-            <div className="note-kicker">
-              <Zap size={12} strokeWidth={2} aria-hidden /> SETTLEMENT
-            </div>
-            <p>
-              Settlement is defined by code and attested by DreamDEX&rsquo;s oracle committee. NAV is one number
-              anyone can re-derive from two published block numbers.
-            </p>
-            <Link href="/settlement" className="text-button">
-              How settlement works <ArrowUpRight size={13} strokeWidth={1.8} aria-hidden />
-            </Link>
-          </div>
           <SigningRow />
         </div>
       </aside>

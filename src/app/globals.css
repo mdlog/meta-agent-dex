@@ -651,22 +651,6 @@ p, dd, li, figcaption { text-wrap: pretty; }
     background: var(--color-accent);
   }
 
-  .rail-note {
-    margin: 0 5px 20px;
-    padding: 13px 12px 12px;
-    border-left: 1px solid var(--color-accent);
-    background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent);
-  }
-  .rail-note p { margin: 9px 0 11px; color: var(--color-fg-muted); font-size: 12px; line-height: 1.5; }
-  .note-kicker {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--color-accent);
-    font: 600 9px var(--font-mono);
-    letter-spacing: 0.12em;
-  }
-
   .main-panel { flex: 1; min-width: 0; }
 
   .topbar {
