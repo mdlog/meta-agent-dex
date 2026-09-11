@@ -1,0 +1,2028 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Forecast Arena — Signal Room
+
+   Swiss editorial modernism crossed with an institutional trading terminal:
+   an ink field, warm off-white type, acid lime for the things the chain has
+   verified, electric cyan for infrastructure telemetry.
+
+   TWO VOCABULARIES, ONE SOURCE OF TRUTH
+   -------------------------------------
+   Existing components address colour through our role names
+   (--color-canvas, --color-fg-muted, --color-line, --color-up …) in ~45
+   places. The Signal Room markup we ported addresses it through the
+   shadcn-shaped names it was authored against (--background, --card,
+   --primary, --border, --radius …).
+
+   Renaming either set would mean touching every consumer, so instead the
+   literal values live exactly once — in the @theme block below, under our
+   role names — and the Signal Room names are declared in :root as aliases
+   that point at them. Change a colour in one place and both vocabularies
+   move together. Never give a Signal Room name a literal value here.
+
+   COLOUR ROLES THAT ARE DELIBERATELY NOT THE SAME THING
+   ----------------------------------------------------
+   --color-accent (lime) is the brand: primary action, verified state, live
+   system signal. --color-up (green) is a market direction. They are close
+   in hue and must stay separate roles, because "this settled on chain" and
+   "this went up" are different claims. Up/Down is never carried by colour
+   alone — every one of them also ships a caret and a word.
+
+   @theme static, not @theme: these tokens are read by hand-written CSS and
+   by ported markup as often as by generated utilities, so none of them may
+   be tree-shaken away.
+   ========================================================================== */
+
+@theme static {
+  /* -- Surfaces ----------------------------------------------------------- */
+  --color-canvas:   #0D1118; /* page field */
+  --color-sidebar:  #0A0E14; /* the persistent rail, one step below canvas */
+  --color-card:     #11171F; /* raised surface */
+  --color-card-2:   #171E28; /* hover / secondary controls */
+  --color-card-3:   #212A35; /* active / selected surface */
+  --color-line:     #242B35; /* default border */
+  --color-line-soft:#191F29; /* row dividers */
+
+  /* -- Type on those surfaces --------------------------------------------- */
+  --color-fg:        #F0F3EC; /* warm off-white; stone, not paper */
+  --color-fg-muted:  #9AA6AC; /* 7.3:1 on card */
+  --color-fg-subtle: #78868F; /* 4.8:1 on card — the floor for readable text */
+
+  /* -- Signal ------------------------------------------------------------- */
+  /* Acid lime. Primary action, verified execution, live system state. */
+  --color-accent:       #C8F169;
+  --color-accent-hover: #D6FF83;
+  --color-accent-fg:    #D7E4AE; /* links and active labels on dark surfaces */
+  --color-accent-ink:   #151A1B; /* type ON a lime fill — white fails here */
+
+  /* Electric cyan: infrastructure and telemetry. Never an action colour. */
+  --color-cyan:   #61D8E8;
+  --color-violet: #B7A4FF; /* categorical, for agent/outcome identity only */
+  --color-amber:  #F5B97C;
+
+  /* -- Market semantics --------------------------------------------------- */
+  /* Prediction-market convention: Up/Yes green, Down/No red. Never inverted. */
+  --color-up:     #2FBF71;
+  --color-down:   #EF5A6E;
+
+  --color-good:   #2FBF71; /* a good outcome — sibling of Up, not of lime */
+  --color-warn:   #E5B767;
+  --color-danger: #EF5A6E;
+
+  /* -- Signal Room aliases (utility-generating half) ----------------------- */
+  /* Same values, second vocabulary. bg-background === bg-canvas. */
+  --color-background:           var(--color-canvas);
+  --color-foreground:           var(--color-fg);
+  --color-card-foreground:      var(--color-fg);
+  --color-popover:              var(--color-card);
+  --color-popover-foreground:   var(--color-fg);
+  --color-primary:              var(--color-accent);
+  --color-primary-foreground:   var(--color-accent-ink);
+  --color-secondary:            var(--color-card-2);
+  --color-secondary-foreground: var(--color-fg);
+  --color-muted:                var(--color-card-2);
+  --color-muted-foreground:     var(--color-fg-muted);
+  --color-accent-foreground:    var(--color-canvas);
+  --color-destructive:          var(--color-danger);
+  --color-destructive-foreground: var(--color-fg);
+  --color-border:               var(--color-line);
+  --color-input:                var(--color-line);
+  --color-ring:                 var(--color-accent);
+
+  /* -- Type --------------------------------------------------------------- */
+  /* Loaded by next/font in layout.tsx; the family name it mints is opaque,
+     so nothing may reference "DM Sans" or "Space Grotesk" by literal name. */
+  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-xs: 12px;
+  --text-xs--line-height: 1.5;
+  --text-sm: 13px;
+  --text-sm--line-height: 1.5;
+  --text-base: 14px;
+  --text-base--line-height: 1.6;
+  --text-md: 15px;
+  --text-md--line-height: 1.6;
+  --text-lg: 16px;
+  --text-lg--line-height: 1.55;
+  --text-xl: 18px;
+  --text-xl--line-height: 1.4;
+  --text-xl--letter-spacing: -0.005em;
+  --text-2xl: 22px;
+  --text-2xl--line-height: 1.25;
+  --text-2xl--letter-spacing: -0.01em;
+  --text-3xl: 28px;
+  --text-3xl--line-height: 1.15;
+  --text-3xl--letter-spacing: -0.015em;
+  --text-4xl: 36px;
+  --text-4xl--line-height: 1.1;
+  --text-4xl--letter-spacing: -0.02em;
+  --text-5xl: clamp(38px, 3.6vw + 16px, 54px);
+  --text-5xl--line-height: 1.05;
+  --text-5xl--letter-spacing: -0.025em;
+
+  /* -- Shape -------------------------------------------------------------- */
+  /* Signal Room draws its own panels square-cornered on purpose; these are
+     the radii for controls and for the components that predate the port. */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* -- Elevation ---------------------------------------------------------- */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-pop: 0 12px 32px -12px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Signal Room aliases (bare half). The ported component classes and any
+     shadcn primitive read these. Values live in @theme above — only. */
+  --background:             var(--color-canvas);
+  --foreground:             var(--color-fg);
+  --card:                   var(--color-card);
+  --card-foreground:        var(--color-fg);
+  --popover:                var(--color-card);
+  --popover-foreground:     var(--color-fg);
+  --primary:                var(--color-accent);
+  --primary-foreground:     var(--color-accent-ink);
+  --secondary:              var(--color-card-2);
+  --secondary-foreground:   var(--color-fg);
+  --muted:                  var(--color-card-2);
+  --muted-foreground:       var(--color-fg-muted);
+  --accent:                 var(--color-cyan); /* SR's accent is telemetry cyan */
+  --accent-foreground:      var(--color-canvas);
+  --destructive:            var(--color-danger);
+  --destructive-foreground: var(--color-fg);
+  --border:                 var(--color-line);
+  --input:                  var(--color-line);
+  --ring:                   var(--color-accent);
+  --radius:                 var(--radius-lg);
+
+  /* signal-room.css lists these as webfont fallbacks. Geist is no longer
+     loaded, and an unresolvable var() in a font-family list invalidates the
+     whole declaration, so keep both names resolvable. New code should use
+     --font-sans / --font-display / --font-mono. */
+  --font-geist: var(--font-dm-sans);
+  --font-geist-mono: var(--font-plex-mono);
+
+  /* Layout constants */
+  --gutter: 20px;
+  --measure: 1200px;
+  --header-h: 60px;
+  --rail-w: 244px;
+  --dur: 150ms;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 24px);
+}
+
+html, body {
+  background: var(--color-canvas);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body { min-height: 100dvh; min-width: 320px; }
+
+/* Display face on every heading, so components written before the port pick
+   up the editorial voice without being edited. Space Grotesk is drawn tight;
+   -0.02em is the compromise that survives both 13px and 54px. */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p, dd, li, figcaption { text-wrap: pretty; }
+
+@layer base {
+  a { color: inherit; }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+::selection { background: var(--color-accent); color: var(--color-accent-ink); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; border: 2px solid var(--color-canvas); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-fg-subtle); }
+
+/* Numbers align in columns; identifiers and hashes read as code. */
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--font-mono); font-size: 0.92em; letter-spacing: -0.01em; }
+
+/* The 8% reduction optically matches mono to adjacent sans at the same size.
+   Inside Signal Room's own rules the size was already chosen for mono, and
+   these run at 9–10px, where another 8% off drops under legibility. */
+.market-overline .mono,
+.subpage-context .mono,
+.live-ticker .mono,
+.hero-meta-foot .mono,
+.market-row-meta .mono,
+.ledger-row .mono { font-size: inherit; }
+
+/* --------------------------------------------------------------------------
+   Component classes. Layered so a utility on the same element still wins.
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* Surfaces ------------------------------------------------------------ */
+  .card {
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+  }
+  .card-hover {
+    transition: border-color var(--dur) ease, background-color var(--dur) ease;
+  }
+  .card-hover:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 34%, var(--color-line));
+    background: var(--color-card-2);
+  }
+
+  /* Buttons ------------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.25rem;
+    padding: 0 0.875rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color var(--dur) ease,
+      border-color var(--dur) ease,
+      color var(--dur) ease,
+      box-shadow var(--dur) ease,
+      transform 80ms ease;
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Lime fill: ink type, not white. */
+  .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.18);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    box-shadow: 0 7px 22px color-mix(in srgb, var(--color-accent) 13%, transparent);
+  }
+
+  .btn-secondary {
+    background: var(--color-card-2);
+    border-color: var(--color-line);
+    color: var(--color-fg);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-card-3);
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
+    color: var(--color-accent-fg);
+  }
+
+  .btn-ghost { background: transparent; color: var(--color-fg-muted); }
+  .btn-ghost:hover:not(:disabled) { background: var(--color-card-2); color: var(--color-fg); }
+
+  .btn-danger {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--color-danger) 45%, transparent);
+    color: var(--color-danger);
+  }
+  .btn-danger:hover:not(:disabled) { background: color-mix(in srgb, var(--color-danger) 12%, transparent); }
+
+  .btn-sm { height: 2rem; padding: 0 0.75rem; font-size: var(--text-xs); }
+  .btn-lg { height: 2.75rem; padding: 0 1.25rem; font-size: var(--text-base); }
+  .btn-block { width: 100%; }
+
+  /* Text link -------------------------------------------------------------- */
+  .link {
+    color: var(--color-accent-fg);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-accent-fg) 35%, transparent);
+    text-underline-offset: 3px;
+    transition: text-decoration-color var(--dur) ease, color var(--dur) ease;
+  }
+  .link:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+
+  /* Inputs ---------------------------------------------------------------- */
+  .input {
+    display: block;
+    width: 100%;
+    height: 2.25rem;
+    padding: 0 0.75rem;
+    background: var(--color-canvas);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    color: var(--color-fg);
+    font-size: var(--text-sm);
+    transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+  }
+  .input::placeholder { color: var(--color-fg-subtle); }
+  .input:hover { border-color: color-mix(in srgb, var(--color-fg) 18%, var(--color-line)); }
+  .input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+  .input-area { height: auto; padding: 0.5rem 0.75rem; line-height: 1.5; resize: none; }
+
+  .label { display: block; font-size: var(--text-xs); font-weight: 500; color: var(--color-fg-muted); }
+  .help { font-size: var(--text-xs); color: var(--color-fg-subtle); }
+
+  /* Badges ---------------------------------------------------------------- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 1.375rem;
+    padding: 0 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .badge-neutral { background: var(--color-card-2); border-color: var(--color-line); color: var(--color-fg-muted); }
+  .badge-good    { background: color-mix(in srgb, var(--color-good) 12%, transparent); border-color: color-mix(in srgb, var(--color-good) 30%, transparent); color: var(--color-good); }
+  .badge-warn    { background: color-mix(in srgb, var(--color-warn) 12%, transparent); border-color: color-mix(in srgb, var(--color-warn) 30%, transparent); color: var(--color-warn); }
+  .badge-danger  { background: color-mix(in srgb, var(--color-danger) 12%, transparent); border-color: color-mix(in srgb, var(--color-danger) 35%, transparent); color: var(--color-danger); }
+  .badge-accent  { background: color-mix(in srgb, var(--color-accent) 12%, transparent); border-color: color-mix(in srgb, var(--color-accent) 38%, transparent); color: var(--color-accent); }
+
+  /* Segmented control ----------------------------------------------------- */
+  .segmented {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--color-card-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+  .segmented > * {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.75rem;
+    padding: 0 0.75rem;
+    border-radius: 5px;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-fg-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--dur) ease, color var(--dur) ease;
+  }
+  .segmented > *:hover { color: var(--color-fg); }
+  .segmented > [aria-pressed="true"],
+  .segmented > [aria-selected="true"] {
+    background: var(--color-card-3);
+    color: var(--color-fg);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+  }
+  .segmented-grow { display: flex; width: 100%; }
+  .segmented-grow > * { flex: 1; }
+
+  /* Callouts -------------------------------------------------------------- */
+  .callout {
+    padding: 0.75rem 0.875rem;
+    border: 1px solid;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+  }
+  .callout-neutral { border-color: var(--color-line); background: var(--color-card-2); }
+  .callout-good    { border-color: color-mix(in srgb, var(--color-good) 35%, transparent); background: color-mix(in srgb, var(--color-good) 8%, transparent); }
+  .callout-warn    { border-color: color-mix(in srgb, var(--color-warn) 35%, transparent); background: color-mix(in srgb, var(--color-warn) 8%, transparent); }
+  .callout-danger  { border-color: color-mix(in srgb, var(--color-danger) 35%, transparent); background: color-mix(in srgb, var(--color-danger) 8%, transparent); }
+
+  /* Tables ---------------------------------------------------------------- */
+  .table-wrap {
+    overflow-x: auto;
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+  }
+  .table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-sm); }
+  .table th {
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--color-fg-subtle);
+    background: var(--color-card-2);
+    border-bottom: 1px solid var(--color-line);
+    white-space: nowrap;
+  }
+  .table td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--color-line-soft);
+    vertical-align: middle;
+  }
+  .table tbody tr:last-child td { border-bottom: 0; }
+  .table tbody tr:hover td { background: color-mix(in srgb, var(--color-card-2) 70%, transparent); }
+  .table .is-right { text-align: right; }
+
+  /* Stat block ------------------------------------------------------------ */
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Section heading ------------------------------------------------------- */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  /* Skeleton -------------------------------------------------------------- */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-card-2);
+    border-radius: var(--radius-sm);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.05) 50%, transparent 100%);
+    background-size: 220% 100%;
+    animation: sweep 1.4s ease-in-out infinite;
+  }
+}
+
+/* ==========================================================================
+   SIGNAL ROOM
+   The ported component system. Same layer as the classes above so a Tailwind
+   utility on the same element still wins.
+
+   Two substitutions were made throughout the port:
+   1. Font families are var(--font-*), never literal names — next/font mints
+      opaque family names, so "Space Grotesk" would silently fall back.
+   2. The four referenced illustrations do not exist. Every surface that
+      expected one is a generated field built from the tokens instead
+      (.signal-field), so the panels are deliberate rather than broken.
+   ========================================================================== */
+@layer components {
+  /* Tailwind v4 no longer gives buttons a pointer cursor. ------------------ */
+  .icon-button, .primary-button, .secondary-button, .text-button, .view-link,
+  .filter-button, .market-row, .market-add, .row-action, .toggle,
+  .appearance-option, .profile-row, .filter-drawer button { cursor: pointer; }
+
+  /* Generated fields ------------------------------------------------------ */
+  /* The trajectory motif: a micro-grid under two soft signal blooms, with a
+     thin orbit arc cutting the panel. Replaces the missing artwork. */
+  .signal-grid {
+    background-image:
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 24px),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 24px);
+  }
+  .signal-field {
+    position: relative;
+    overflow: hidden;
+    background-color: #131A22;
+    background-image:
+      radial-gradient(115% 85% at 78% 10%, color-mix(in srgb, var(--color-cyan) 17%, transparent), transparent 62%),
+      radial-gradient(90% 80% at 10% 94%, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent 58%),
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 24px),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 24px);
+  }
+  .signal-field::before {
+    content: "";
+    position: absolute;
+    left: -18%;
+    bottom: -58%;
+    width: 136%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 26%, transparent);
+    border-bottom-color: transparent;
+    border-left-color: color-mix(in srgb, var(--color-cyan) 22%, transparent);
+    pointer-events: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     Shell chrome — .app-shell, .sidebar, .topbar, .page-content and the rest
+     of the frame AppShell.tsx renders.
+
+     RESTORED, and worth knowing why. Two layers were built in parallel and
+     each deferred to the other: this file removed the chrome believing
+     signal-room.css owned it, and signal-room.css says in its own header that
+     "globals.css owns the ported Signal Room system, chrome included". The
+     result was that .app-shell, .sidebar, .main-panel and .page-content had no
+     rule anywhere, so every route rendered as an unstyled column.
+
+     It belongs here, layered, because that is the cascade signal-room.css was
+     written against: its modifiers (.status-dot.is-degraded, the mobile
+     drawer, the footer's wrap) are unlayered and beat these without a
+     specificity race. Nothing below restates anything that file defines.
+     ---------------------------------------------------------------------- */
+  .app-shell {
+    min-height: 100vh;
+    display: flex;
+    background:
+      radial-gradient(circle at 80% 0%, color-mix(in srgb, var(--color-cyan) 8%, transparent), transparent 33rem),
+      var(--color-canvas);
+  }
+
+  .sidebar {
+    width: var(--rail-w);
+    flex: 0 0 var(--rail-w);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 20;
+    border-right: 1px solid var(--color-line);
+    background: var(--color-sidebar);
+  }
+  .sidebar-top { padding: 27px 22px 0; }
+  .sidebar-nav { padding: 34px 12px 0; }
+  .sidebar-bottom { margin-top: auto; padding: 0 12px 18px; }
+
+  .brand-lockup { display: flex; align-items: center; gap: 10px; }
+  .brand-name {
+    color: var(--color-fg);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    line-height: 1;
+  }
+  .brand-name span { color: var(--color-accent); padding: 0 2px; }
+  .brand-subtitle {
+    margin-top: 5px;
+    color: var(--color-fg-subtle);
+    font: 500 8px/1.2 var(--font-mono);
+    letter-spacing: 0.18em;
+  }
+
+  .network-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 31px;
+    padding: 9px 10px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-card-2);
+    color: var(--color-fg-muted);
+    font: 500 10px var(--font-mono);
+  }
+  .network-chip svg { margin-left: auto; color: var(--color-fg-subtle); }
+  /* Cyan is chain telemetry throughout, and the network dot is the first thing
+     wearing it. Same node as .tiny-signal, which is why they share a rule. */
+  .network-dot {
+    width: 6px;
+    height: 6px;
+    flex: none;
+    display: inline-block;
+    border-radius: 100%;
+    background: var(--color-cyan);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-cyan) 10%, transparent);
+  }
+
+  .nav-section-label {
+    padding: 0 11px 10px;
+    color: var(--color-fg-subtle);
+    font: 600 9px var(--font-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .nav-section-space { margin-top: 26px; }
+  .nav-item {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 11px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-fg-muted);
+    text-align: left;
+    transition: background var(--dur) ease, color var(--dur) ease, transform var(--dur) ease;
+  }
+  .nav-item:hover { color: var(--color-fg); background: rgb(255 255 255 / 0.05); transform: translateX(2px); }
+  .nav-item.is-active { color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
+  .nav-item span:not(.nav-active-bar) { font-size: 12px; font-weight: 550; }
+  .nav-active-bar {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--color-accent);
+  }
+
+  .rail-note {
+    margin: 0 5px 20px;
+    padding: 13px 12px 12px;
+    border-left: 1px solid var(--color-accent);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent);
+  }
+  .rail-note p { margin: 9px 0 11px; color: var(--color-fg-muted); font-size: 10px; line-height: 1.5; }
+  .note-kicker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-accent);
+    font: 600 9px var(--font-mono);
+    letter-spacing: 0.12em;
+  }
+
+  .main-panel { flex: 1; min-width: 0; }
+
+  .topbar {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 clamp(20px, 4vw, 54px);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .breadcrumb { display: flex; align-items: center; gap: 11px; color: var(--color-fg-subtle); font-size: 11px; }
+  .breadcrumb strong { color: var(--color-fg); font-weight: 600; }
+  .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+  .live-ticker { display: flex; align-items: center; gap: 8px; color: var(--color-fg-subtle); font-size: 10px; }
+  .live-ticker .mono { margin-left: 2px; }
+  /* The base node. signal-room.css recolours it for degraded and stale; the
+     pill rules further down resize it, and both need something to override. */
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    flex: none;
+    display: inline-block;
+    border-radius: 100%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  /* White on Signal Lime measured 1.9:1 in the source design. --color-accent-ink
+     is the same type at 13.6:1; the button is otherwise unchanged. */
+  .connect-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 13px;
+    border-radius: 5px;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-size: 11px;
+    font-weight: 700;
+    transition: transform 160ms ease, background var(--dur) ease, box-shadow var(--dur) ease;
+  }
+  .connect-button:hover {
+    background: var(--color-accent-hover);
+    box-shadow: 0 7px 22px color-mix(in srgb, var(--color-accent) 13%, transparent);
+  }
+  .connect-button:active { transform: scale(0.97); }
+
+  .mobile-menu, .mobile-close { display: none; background: transparent; color: var(--color-fg-muted); }
+  .mobile-scrim { display: none; }
+
+  .page-content { max-width: 1370px; margin: 0 auto; padding: 28px clamp(20px, 4vw, 54px) 42px; }
+
+  .page-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 65px;
+    padding-top: 22px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-fg-subtle);
+    font-size: 10px;
+  }
+  .footer-right { display: flex; gap: 20px; }
+  .footer-right > span:first-child { display: flex; align-items: center; gap: 7px; }
+
+  /* The design referenced four PNGs that are not in this repo. Nothing here
+     loads an image; the mark is inline SVG and the panels are generated. */
+  .brand-mark { width: 27px; height: 27px; flex: none; display: block; color: var(--color-accent); }
+
+  /* The signal node: a dot with a halo. Cyan reads infrastructure. */
+  .tiny-signal {
+    width: 6px;
+    height: 6px;
+    flex: none;
+    display: inline-block;
+    border-radius: 100%;
+    background: var(--color-cyan);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-cyan) 10%, transparent);
+  }
+
+  .text-button, .view-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    color: var(--color-accent-fg);
+    background: transparent;
+    font-size: 10px;
+    transition: color var(--dur) ease;
+  }
+  .text-button:hover, .view-link:hover { color: var(--color-accent); }
+
+  .profile-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    padding: 15px 8px 2px;
+    margin-top: 9px;
+    color: var(--color-fg-subtle);
+    background: transparent;
+    border-top: 1px solid var(--color-line);
+    text-align: left;
+  }
+  .avatar {
+    width: 27px;
+    height: 27px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-card-3);
+    color: var(--color-cyan);
+    font: 600 9px var(--font-mono);
+  }
+  .profile-copy { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+  .profile-copy strong { color: var(--color-fg); font-size: 11px; font-weight: 600; }
+  .profile-copy span { color: var(--color-fg-subtle); font: 9px var(--font-mono); }
+
+  /* Topbar pieces signal-room.css leaves to us ---------------------------- */
+  .icon-button { position: relative; padding: 6px; background: transparent; color: var(--color-fg-muted); }
+  .icon-button:hover { color: var(--color-fg); }
+  .notification-dot { position: absolute; top: 3px; right: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--color-accent); }
+
+  /* Lime fill, ink type. White on #C8F169 is 1.9:1 and unreadable. */
+  .primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    transition: transform 160ms ease, background var(--dur) ease, box-shadow var(--dur) ease;
+  }
+  .primary-button:hover {
+    background: var(--color-accent-hover);
+    box-shadow: 0 7px 22px color-mix(in srgb, var(--color-accent) 13%, transparent);
+  }
+  .primary-button:active, .secondary-button:active { transform: scale(0.97); }
+
+  /* Hero ------------------------------------------------------------------ */
+  .hero-panel {
+    position: relative;
+    overflow: hidden;
+    min-height: 345px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 47px 46px;
+    border: 1px solid var(--color-line);
+    background-color: #101720;
+    background-image:
+      radial-gradient(78% 120% at 88% 4%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 60%),
+      radial-gradient(60% 100% at 2% 100%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 55%),
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.028) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.028) 0 1px, transparent 1px 28px);
+  }
+  /* The trajectory: one long arc through the panel, cropped by overflow. */
+  .hero-panel::before {
+    content: "";
+    position: absolute;
+    right: -14%;
+    top: 12%;
+    width: 62%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border-right-color: transparent;
+    border-bottom-color: color-mix(in srgb, var(--color-cyan) 20%, transparent);
+    pointer-events: none;
+  }
+  .hero-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(112deg, transparent 55%, color-mix(in srgb, var(--color-accent) 4%, transparent) 100%);
+  }
+  .hero-copy { max-width: 600px; position: relative; z-index: 1; }
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--color-fg-subtle);
+    font: 600 9px var(--font-mono);
+    letter-spacing: 0.16em;
+  }
+  .eyebrow-line { width: 21px; height: 1px; background: var(--color-accent); display: inline-block; }
+  .hero-copy h1 {
+    color: var(--color-fg);
+    font: 600 clamp(42px, 5vw, 70px)/0.99 var(--font-display);
+    letter-spacing: -0.065em;
+    margin: 22px 0 17px;
+  }
+  .hero-copy h1 em { color: var(--color-accent); font-style: normal; }
+  .hero-copy p { max-width: 430px; color: var(--color-fg-muted); font-size: 13px; line-height: 1.62; margin: 0; }
+  .hero-actions { display: flex; align-items: center; gap: 23px; margin-top: 26px; }
+  .hero-actions .text-button { color: var(--color-fg-muted); font-size: 11px; }
+  .hero-actions .text-button:hover { color: var(--color-accent); }
+
+  .hero-meta {
+    align-self: flex-end;
+    z-index: 1;
+    min-width: 175px;
+    padding-left: 24px;
+    margin-bottom: 6px;
+    border-left: 1px solid var(--color-line);
+  }
+  .hero-meta-label { color: var(--color-fg-subtle); font: 600 9px var(--font-mono); letter-spacing: 0.16em; }
+  .hero-meta-value {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 11px;
+    color: var(--color-fg);
+    font: 600 18px var(--font-display);
+    font-variant-numeric: tabular-nums;
+  }
+  .signal-ring {
+    width: 8px;
+    height: 8px;
+    flex: none;
+    display: inline-block;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--color-accent) 14%, transparent),
+      0 0 22px color-mix(in srgb, var(--color-accent) 60%, transparent);
+  }
+  .signal-ring.small { width: 7px; height: 7px; box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 13%, transparent); }
+  .hero-meta-foot { color: var(--color-fg-subtle); font: 9px var(--font-mono); margin-top: 12px; }
+  .hero-meta-foot span { margin: 0 4px; color: var(--color-line); }
+
+  /* Metric strip ---------------------------------------------------------- */
+  .metric-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--color-line);
+    margin-bottom: 54px;
+  }
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 21px 22px 20px 0;
+    margin-right: 22px;
+    border-right: 1px solid var(--color-line);
+  }
+  .metric-item:last-child { border-right: 0; margin-right: 0; }
+  .metric-label {
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font: 600 9px var(--font-mono);
+  }
+  .metric-item strong {
+    color: var(--color-fg);
+    font: 500 27px var(--font-display);
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font: 10px var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-fg-subtle);
+  }
+  /* Direction, in the market's colours — always paired with a caret and a
+     word in the markup, never colour alone. Declared after .metric-delta so
+     source order settles the tie without !important. */
+  .positive { color: var(--color-up); }
+  .negative { color: var(--color-down); }
+  .neutral  { color: var(--color-fg-subtle); }
+
+  /* Section scaffolding --------------------------------------------------- */
+  .section-block { margin-bottom: 62px; }
+  .section-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 20px; }
+  .section-heading h2, .insight-card h2 {
+    color: var(--color-fg);
+    font: 500 26px var(--font-display);
+    letter-spacing: -0.045em;
+    margin: 12px 0 0;
+  }
+  .section-description { color: var(--color-fg-subtle); font-size: 11px; margin: 7px 0 0; }
+  .view-link { font-size: 11px; margin-bottom: 3px; }
+
+  /* Market panels --------------------------------------------------------- */
+  .market-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr); gap: 15px; }
+  .market-feature, .market-row, .insight-card, .settlement-card {
+    border: 1px solid var(--color-line);
+    background: var(--color-card);
+  }
+  .market-feature { display: grid; grid-template-columns: 42% 58%; min-height: 300px; }
+
+  /* Was an illustration; now a generated field. */
+  .market-image {
+    position: relative;
+    overflow: hidden;
+    min-height: 260px;
+    background-color: #131A22;
+    background-image:
+      radial-gradient(115% 85% at 78% 10%, color-mix(in srgb, var(--color-cyan) 17%, transparent), transparent 62%),
+      radial-gradient(90% 80% at 10% 94%, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent 58%),
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 24px),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 24px);
+  }
+  .market-image::before {
+    content: "";
+    position: absolute;
+    left: -18%;
+    bottom: -58%;
+    width: 136%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 26%, transparent);
+    border-bottom-color: transparent;
+    border-left-color: color-mix(in srgb, var(--color-cyan) 22%, transparent);
+    pointer-events: none;
+  }
+  .market-image > svg { position: relative; z-index: 1; width: 100%; height: 100%; display: block; }
+  .image-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 8px;
+    background: color-mix(in srgb, var(--color-sidebar) 86%, transparent);
+    color: var(--color-accent);
+    font: 600 8px var(--font-mono);
+    letter-spacing: 0.12em;
+  }
+
+  .market-feature-body { padding: 28px 29px; display: flex; flex-direction: column; }
+  .market-overline, .market-row-meta, .market-footer { display: flex; align-items: center; justify-content: space-between; }
+  .market-overline {
+    color: var(--color-accent);
+    font: 600 9px var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .market-overline .mono { color: var(--color-fg-subtle); letter-spacing: 0.04em; }
+  .market-feature-body h3 {
+    color: var(--color-fg);
+    font: 500 21px/1.18 var(--font-display);
+    letter-spacing: -0.035em;
+    margin: 20px 0 27px;
+    max-width: 350px;
+  }
+
+  .market-probability { position: relative; display: flex; align-items: end; padding-bottom: 22px; }
+  .probability-main strong, .probability-secondary strong {
+    font: 500 38px var(--font-display);
+    letter-spacing: -0.07em;
+    font-variant-numeric: tabular-nums;
+  }
+  .probability-main strong { color: var(--color-up); }
+  .probability-main span, .probability-secondary span {
+    display: block;
+    color: var(--color-fg-subtle);
+    font: 9px var(--font-mono);
+    margin-top: 3px;
+  }
+  .probability-divider { height: 29px; width: 1px; background: var(--color-line); margin: 0 21px 1px; }
+  .probability-secondary strong { color: var(--color-fg-subtle); font-size: 25px; }
+  .probability-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--color-card-3); }
+  .probability-bar span { display: block; height: 100%; background: var(--color-up); }
+
+  .market-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-fg-muted);
+    font: 11px var(--font-mono);
+  }
+  .muted-label { color: var(--color-fg-subtle); font-size: 9px; margin-right: 4px; }
+
+  .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 11px;
+    border: 1px solid var(--color-line);
+    background: transparent;
+    color: var(--color-fg-muted);
+    border-radius: 4px;
+    font-size: 10px;
+    transition: border-color var(--dur) ease, background var(--dur) ease, color var(--dur) ease, transform 160ms ease;
+  }
+  .secondary-button:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 58%, transparent);
+    color: var(--color-accent-fg);
+    background: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  }
+  .secondary-button.full { width: 100%; }
+
+  .market-list { display: flex; flex-direction: column; gap: 8px; }
+  .market-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 17px 15px;
+    color: var(--color-fg);
+    text-align: left;
+    transition: transform var(--dur) ease, border-color var(--dur) ease, background var(--dur) ease;
+  }
+  .market-row:hover, .market-row.selected {
+    background: color-mix(in srgb, var(--color-accent) 4.5%, transparent);
+    border-color: color-mix(in srgb, var(--color-accent) 26%, transparent);
+    transform: translateX(2px);
+  }
+  .market-icon { width: 31px; height: 31px; flex: 0 0 31px; display: grid; place-items: center; border-radius: 50%; }
+  .market-icon.lime   { color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+  .market-icon.cyan   { color: var(--color-cyan);   background: color-mix(in srgb, var(--color-cyan) 10%, transparent); }
+  .market-icon.violet { color: var(--color-violet); background: color-mix(in srgb, var(--color-violet) 10%, transparent); }
+  .market-icon.amber  { color: var(--color-amber);  background: color-mix(in srgb, var(--color-amber) 10%, transparent); }
+
+  .market-row-copy { min-width: 0; flex: 1; }
+  .market-row-copy strong { display: block; font: 600 11px var(--font-display); }
+  .market-row-copy > span { display: block; color: var(--color-fg-muted); font-size: 11px; line-height: 1.35; margin-top: 6px; }
+  .market-row-meta {
+    justify-content: flex-start;
+    gap: 7px;
+    margin-top: 14px;
+    color: var(--color-fg-subtle);
+    font: 9px var(--font-mono);
+  }
+  .market-row-meta span:first-child { color: var(--color-accent); }
+  .market-row-right { display: flex; flex-direction: column; align-items: end; gap: 20px; }
+  .expiry {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    color: var(--color-fg-subtle);
+    font: 9px var(--font-mono);
+  }
+  .market-chevron { color: var(--color-fg-subtle); transform: rotate(-90deg); }
+  .market-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    margin-top: 1px;
+    color: var(--color-fg-subtle);
+    background: transparent;
+    border: 1px dashed var(--color-line);
+    font-size: 10px;
+    transition: color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .market-add:hover { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 40%, transparent); }
+
+  /* Agent table ----------------------------------------------------------- */
+  .leaderboard-section { margin-bottom: 59px; }
+  .leaderboard-heading { align-items: end; }
+  .table-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; }
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 245px;
+    padding: 7px 4px;
+    color: var(--color-fg-subtle);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--color-fg); font-size: 11px; }
+  .search-box input::placeholder { color: var(--color-fg-subtle); }
+  .toolbar-actions { display: flex; gap: 7px; }
+  .filter-button, .toolbar-actions select {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--color-card-2);
+    color: var(--color-fg-muted);
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .toolbar-actions select { appearance: none; min-width: 108px; }
+  .filter-button.active { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
+  .filter-drawer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+    color: var(--color-fg-muted);
+    font-size: 10px;
+  }
+  .filter-drawer button { display: flex; align-items: center; gap: 4px; color: var(--color-accent); background: transparent; font-size: 10px; }
+
+  .agent-table-wrap { overflow-x: auto; border-top: 1px solid var(--color-line); }
+  .agent-table { width: 100%; border-collapse: collapse; min-width: 930px; }
+  .agent-table th {
+    padding: 13px 10px;
+    text-align: left;
+    white-space: nowrap;
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font: 600 8px var(--font-mono);
+  }
+  .agent-table td {
+    padding: 15px 10px;
+    vertical-align: middle;
+    color: var(--color-fg);
+    border-top: 1px solid var(--color-line-soft);
+    font-size: 11px;
+  }
+  .agent-table tbody tr { transition: background var(--dur) ease; }
+  .agent-table tbody tr:hover { background: rgb(255 255 255 / 0.025); }
+  /* The whole row opens the agent, not just its name.
+     A stretched link rather than an onClick on the row: the name stays the real
+     anchor, so keyboard focus, middle-click and ctrl+click keep working and a
+     screen reader still hears one link with the agent's name. Only rows that
+     actually carry one become clickable, so an empty-state row does not get a
+     pointer over nothing. */
+  .agent-table tbody tr:has(.row-link) { position: relative; cursor: pointer; }
+  .agent-table .row-link::after { content: ""; position: absolute; inset: 0; }
+  /* Lifted above the stretched area, or the vault's explorer link and the row
+     action would both be swallowed by it. */
+  .agent-table tbody tr a:not(.row-link),
+  .agent-table tbody tr button { position: relative; z-index: 1; }
+  .agent-table .rank-col, .agent-table .rank-cell { width: 35px; padding-left: 4px; }
+  .agent-table td.rank-cell { color: var(--color-fg-subtle); }
+  .agent-table td.muted-cell { color: var(--color-fg-muted); }
+  .extended { min-width: 900px; }
+
+  .agent-cell { display: flex; align-items: center; gap: 10px; }
+  .agent-cell strong { display: block; font: 600 12px var(--font-display); }
+  .agent-avatar { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 7px; }
+  .agent-avatar.lime   { color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 11%, transparent); }
+  .agent-avatar.cyan   { color: var(--color-cyan);   background: color-mix(in srgb, var(--color-cyan) 11%, transparent); }
+  .agent-avatar.violet { color: var(--color-violet); background: color-mix(in srgb, var(--color-violet) 10%, transparent); }
+  .agent-avatar.amber  { color: var(--color-amber);  background: color-mix(in srgb, var(--color-amber) 10%, transparent); }
+
+  .address { display: flex; align-items: center; gap: 5px; margin-top: 4px; color: var(--color-fg-subtle); font-family: var(--font-mono); font-size: 9px; }
+  .strategy-chip { color: var(--color-fg-muted); background: var(--color-card-2); padding: 5px 7px; font-size: 9px; white-space: nowrap; }
+
+  .performance-cell { display: flex; align-items: center; gap: 12px; min-width: 175px; }
+  .performance-cell strong { font: 600 12px var(--font-mono); font-variant-numeric: tabular-nums; }
+  .performance-cell span:not(.positive):not(.negative) { color: var(--color-fg-subtle); font: 9px var(--font-mono); }
+  .performance-cell svg { margin-left: auto; }
+  /* The chart and the line naming it, kept together and pushed right as one
+     block. The caption is not decoration: it carries the sample count, and a
+     two-sample chart is an interpolation the reader has to be told about. */
+  .performance-spark {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .performance-spark svg { margin-left: 0; }
+  .mini-line { width: 100px; height: 30px; }
+
+  .risk-label { font: 10px var(--font-mono); }
+  .risk-label.low { color: var(--color-up); }
+  .risk-label.medium { color: var(--color-warn); }
+  .risk-label.high { color: var(--color-down); }
+
+  /* Session lifecycle. `void` is a real state, not an error — it renders as
+     a settled-but-empty pill, muted rather than red. */
+  .status-pill { display: inline-flex; align-items: center; gap: 7px; color: var(--color-fg-subtle); font: 9px var(--font-mono); }
+  .status-pill .status-dot { width: 5px; height: 5px; background: var(--color-fg-subtle); box-shadow: none; }
+  .status-pill.is-live { color: var(--color-accent); }
+  .status-pill.is-live .status-dot { background: var(--color-accent); }
+  .status-pill.is-settling { color: var(--color-warn); }
+  .status-pill.is-settling .status-dot { background: var(--color-warn); }
+  .status-pill.is-settled { color: var(--color-cyan); }
+  .status-pill.is-settled .status-dot { background: var(--color-cyan); }
+  .status-pill.is-void { color: var(--color-fg-subtle); }
+  .status-pill.is-void .status-dot { background: transparent; box-shadow: inset 0 0 0 1px var(--color-fg-subtle); }
+
+  .row-action { color: var(--color-fg-subtle); background: transparent; padding: 5px; }
+  .row-action:hover { color: var(--color-accent); }
+  .empty-state {
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-fg-subtle);
+    font-size: 12px;
+  }
+
+  /* Insight + settlement panels ------------------------------------------- */
+  .lower-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 15px; margin-top: 15px; }
+  .insight-card {
+    padding: 29px 31px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-cyan) 5%, var(--color-card)), var(--color-card));
+  }
+  .card-topline { display: flex; justify-content: space-between; }
+  .accent-icon { color: var(--color-accent); }
+  .insight-card p { color: var(--color-fg-muted); font-size: 12px; line-height: 1.65; max-width: 500px; margin: 21px 0 25px; }
+  .insight-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 14px;
+    padding: 20px 0 22px;
+    border-top: 1px solid var(--color-line);
+  }
+  /* subgrid, so a title that wraps to two lines lifts every sibling's body text
+     to the same line rather than leaving one column sitting low. */
+  .insight-points > div {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-content: start;
+    gap: 5px;
+  }
+  .point-index { color: var(--color-accent); font: 10px var(--font-mono); }
+  .insight-points strong { color: var(--color-fg); font: 600 11px var(--font-display); }
+  .insight-points span:last-child { color: var(--color-fg-subtle); font-size: 10px; line-height: 1.35; }
+
+  /* Was an illustration; now a generated field with a bottom scrim. */
+  .settlement-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 320px;
+    background-color: #101720;
+    background-image:
+      radial-gradient(85% 70% at 70% 18%, color-mix(in srgb, var(--color-cyan) 20%, transparent), transparent 62%),
+      radial-gradient(70% 60% at 12% 30%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 58%),
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 26px);
+  }
+  .settlement-card::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 8%;
+    width: 74%;
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-cyan) 24%, transparent);
+    border-bottom-color: transparent;
+    pointer-events: none;
+  }
+  .settlement-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(0deg, rgb(8 12 17 / 0.94) 0%, rgb(8 12 17 / 0.2) 75%);
+  }
+  .settlement-overlay { position: absolute; z-index: 1; inset: auto 28px 25px; }
+  .settlement-overlay h3 { color: var(--color-fg); font: 500 25px var(--font-display); letter-spacing: -0.045em; margin: 11px 0 19px; }
+  .settlement-status { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .settlement-status div { display: flex; flex-direction: column; gap: 3px; }
+  .settlement-status strong { color: var(--color-fg); font: 11px var(--font-mono); }
+  .settlement-status span:last-child { color: var(--color-fg-subtle); font-size: 10px; }
+
+  /* .page-footer and .footer-right are signal-room.css's; these two are not. */
+  .footer-dot { color: var(--color-accent); margin: 0 4px; }
+  .footer-right .tiny-signal { background: var(--color-accent); box-shadow: none; }
+
+  /* ------------------------------------------------------------------------
+     Subpages: shared headers, evidence cards, protocol queues, controls.
+     ---------------------------------------------------------------------- */
+  .subpage-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    padding: 26px 0 34px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .subpage-heading h1 {
+    color: var(--color-fg);
+    font: 500 clamp(35px, 4vw, 53px)/1 var(--font-display);
+    letter-spacing: -0.06em;
+    margin: 17px 0 10px;
+  }
+  .subpage-heading p { color: var(--color-fg-muted); font-size: 12px; line-height: 1.55; margin: 0; max-width: 520px; }
+  .subpage-context {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 5px;
+    white-space: nowrap;
+    color: var(--color-fg-muted);
+    font: 9px var(--font-mono);
+    letter-spacing: 0.08em;
+  }
+  .subpage-context .mono { color: var(--color-fg-subtle); }
+
+  .stat-grid { display: grid; gap: 1px; border: 1px solid var(--color-line); background: var(--color-line); margin-bottom: 25px; }
+  .stat-grid.four { grid-template-columns: repeat(4, 1fr); }
+  .stat-card { background: var(--color-card); padding: 18px 19px; display: flex; flex-direction: column; gap: 8px; min-height: 109px; }
+  .stat-card strong {
+    color: var(--color-fg);
+    font: 500 27px var(--font-display);
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .page-card { border: 1px solid var(--color-line); background: var(--color-card); padding: 22px 23px; }
+  .page-card .table-toolbar { margin-bottom: 4px; }
+
+  /* auto-fit, not a hardcoded 2: the agent count is whatever is registered, and
+     three agents filled two columns and left the third stranded beside an empty
+     half-row. The 300px floor is what the two settlement figures and the
+     question need to stay readable side by side; below it the grid drops a
+     column by itself, which is why the 900px and 760px overrides that used to
+     force a single column are gone. */
+  .market-grid-page {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 18px;
+  }
+  /* A column, so `.market-detail-meta` can claim the slack with margin-top:auto.
+     The prose below the figures runs 290-520 characters depending on what the
+     vault is holding, and stretched cards were paying for that difference as
+     dead space under the shortest card's call to action. */
+  .market-detail-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    border: 1px solid var(--color-line);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-cyan) 6%, var(--color-card)), var(--color-card));
+  }
+  .market-detail-card::after {
+    content: "";
+    position: absolute;
+    right: -60px;
+    top: -65px;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 11%, transparent);
+    box-shadow:
+      0 0 0 20px color-mix(in srgb, var(--color-accent) 2.5%, transparent),
+      0 0 0 42px color-mix(in srgb, var(--color-accent) 1.6%, transparent);
+    pointer-events: none;
+  }
+  .market-detail-icon {
+    position: relative;
+    z-index: 1;
+    width: 41px;
+    height: 41px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    margin-bottom: 18px;
+  }
+  .market-detail-icon.lime   { color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+  .market-detail-icon.cyan   { color: var(--color-cyan);   background: color-mix(in srgb, var(--color-cyan) 10%, transparent); }
+  .market-detail-icon.violet { color: var(--color-violet); background: color-mix(in srgb, var(--color-violet) 10%, transparent); }
+  .market-detail-icon.amber  { color: var(--color-amber);  background: color-mix(in srgb, var(--color-amber) 10%, transparent); }
+  .market-card-head { display: flex; justify-content: space-between; align-items: center; }
+  .market-detail-card h3 {
+    color: var(--color-fg);
+    font: 500 19px/1.28 var(--font-display);
+    letter-spacing: -0.04em;
+    /* The question is the one ragged line on the card; balance keeps its last
+       line from orphaning a word. The max-width that used to sit here was
+       dead — 480px never applied inside a card this narrow. */
+    text-wrap: balance;
+    margin: 12px 0 18px;
+  }
+
+  /* Yes/No odds. Yes is Up-green, No is Down-red — the same pair as the rail. */
+  .odds-block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+  /* Two figures on some cards, three on others — `space-between` spreads either
+     count across the same width, so the row reads identically card to card.
+     Baseline alignment, not centre: the 18px aside is a different size from the
+     27px settlement figures and centring left it floating between them. */
+  .contract-odds {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .contract-odds > div { display: flex; flex-direction: column; gap: 4px; }
+  .contract-odds strong { color: var(--color-up); font: 500 27px var(--font-display); font-variant-numeric: tabular-nums; }
+  .contract-odds span { color: var(--color-fg-subtle); font: 8px var(--font-mono); letter-spacing: 0.08em; }
+  .contract-odds .no-odds strong { color: var(--color-down); }
+  /* A measurement that sits beside the two settlement figures without claiming
+     to be one of them. `nav()` is what the meta-market pays out on; the value
+     of the outcome tokens a vault is holding is not, so it is set a size down
+     and in muted rather than tinted up or down — a colour here would read as a
+     P&L call the vault has not made. */
+  .contract-odds .odds-aside strong { font-size: 18px; color: var(--color-fg-muted); }
+  .odds-bar { height: 3px; background: var(--color-card-3); width: 100%; }
+  .odds-bar span { display: block; height: 100%; background: var(--color-up); }
+  .market-detail-meta {
+    display: flex;
+    justify-content: space-between;
+    /* Claims the slack a shorter prose block leaves, so the meta row and the
+       call to action under it sit on the same line across every card. */
+    margin-top: auto;
+    padding: 14px 0 16px;
+    color: var(--color-fg-subtle);
+    font: 9px var(--font-mono);
+  }
+  .market-detail-meta span:first-child { display: flex; align-items: center; gap: 5px; }
+
+  .subpage-callout {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    margin-top: 14px;
+    border: 1px dashed color-mix(in srgb, var(--color-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 4%, transparent);
+  }
+  .callout-icon {
+    width: 33px;
+    height: 33px;
+    flex: 0 0 33px;
+    display: grid;
+    place-items: center;
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 11%, transparent);
+    border-radius: 50%;
+  }
+  .subpage-callout > div:nth-child(2) { flex: 1; }
+  .subpage-callout strong { color: var(--color-fg); font: 600 12px var(--font-display); }
+  .subpage-callout p { color: var(--color-fg-muted); font-size: 10px; margin: 5px 0 0; }
+  .subpage-callout .primary-button { padding: 10px 13px; font-size: 10px; }
+
+  /* Creator hero + orbit -------------------------------------------------- */
+  .creator-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 300px;
+    padding: 34px 42px;
+    margin-bottom: 25px;
+    border: 1px solid var(--color-line);
+    background:
+      radial-gradient(circle at 78% 50%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 17rem),
+      linear-gradient(110deg, color-mix(in srgb, var(--color-cyan) 6%, var(--color-card)), var(--color-canvas));
+  }
+  .creator-hero h2 { color: var(--color-fg); font: 500 39px/1.03 var(--font-display); letter-spacing: -0.06em; margin: 18px 0 14px; }
+  .creator-hero h2 em { color: var(--color-accent); font-style: normal; }
+  .creator-hero p { color: var(--color-fg-muted); max-width: 410px; font-size: 12px; line-height: 1.6; margin: 0 0 23px; }
+
+  .creator-orbit { width: 220px; height: 220px; position: relative; margin-right: 8%; }
+  .orbit-ring { position: absolute; border: 1px solid color-mix(in srgb, var(--color-cyan) 35%, transparent); border-radius: 50%; transform: rotate(-20deg); }
+  .ring-one { inset: 25px 0; }
+  .ring-two { inset: 0 27px; transform: rotate(55deg); border-color: color-mix(in srgb, var(--color-accent) 28%, transparent); }
+  .orbit-core {
+    position: absolute;
+    top: 77px;
+    left: 77px;
+    width: 67px;
+    height: 67px;
+    display: grid;
+    place-items: center;
+    color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 50%, transparent);
+    background: var(--color-card-2);
+    border-radius: 50%;
+    box-shadow: 0 0 45px color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+  .orbit-node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-cyan);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-cyan) 10%, transparent);
+  }
+  .node-one { top: 16px; right: 40px; }
+  .node-two { bottom: 21px; left: 16px; background: var(--color-accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-accent) 10%, transparent); }
+
+  .card-header-row { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; }
+  .card-header-row h2 { color: var(--color-fg); font: 500 22px var(--font-display); letter-spacing: -0.04em; margin: 11px 0 0; }
+  .agent-cards { display: grid; gap: 9px; }
+  .creator-agent-card {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px;
+    border: 1px solid var(--color-line);
+    background: var(--color-card-2);
+  }
+  .creator-agent-main { flex: 1; min-width: 0; }
+  .creator-agent-name { display: flex; align-items: center; gap: 10px; }
+  .creator-agent-name strong { color: var(--color-fg); font: 600 13px var(--font-display); }
+  .creator-agent-main .strategy-chip { display: inline-block; margin: 7px 7px 0 0; }
+  .creator-agent-main .address { display: inline-flex; }
+  .creator-agent-metrics { display: flex; flex-direction: column; gap: 5px; min-width: 125px; }
+  .creator-agent-metrics strong { color: var(--color-fg); font: 500 17px var(--font-display); font-variant-numeric: tabular-nums; }
+  .creator-agent-metrics .mono { font-size: 9px; }
+
+  /* Settlement engine ----------------------------------------------------- */
+  .settlement-status-banner {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px 18px;
+    margin-bottom: 17px;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 23%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 5.5%, transparent);
+  }
+  .status-banner-icon {
+    width: 35px;
+    height: 35px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    color: var(--color-accent);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  }
+  .settlement-status-banner > div:nth-child(2) { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .settlement-status-banner strong { color: var(--color-fg); font: 600 12px var(--font-display); }
+  .settlement-status-banner span:not(.status-dot):not(.status-pill) { color: var(--color-fg-muted); font-size: 10px; }
+
+  .protocol-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 14px; }
+  .queue-list { display: grid; gap: 6px; }
+  .queue-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-top: 1px solid var(--color-line); }
+  .queue-icon {
+    width: 29px;
+    height: 29px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    color: var(--color-cyan);
+    background: color-mix(in srgb, var(--color-cyan) 10%, transparent);
+    border-radius: 6px;
+  }
+  .queue-copy { flex: 1; min-width: 0; }
+  .queue-copy strong { display: block; color: var(--color-fg); font: 600 11px var(--font-display); }
+  .queue-copy > span { display: block; color: var(--color-fg-muted); font-size: 10px; margin: 4px 0 10px; }
+  .queue-copy small { color: var(--color-fg-subtle); font: 9px var(--font-mono); }
+  .queue-progress { height: 3px; background: var(--color-card-3); margin-bottom: 7px; }
+  .queue-progress span { display: block; height: 100%; background: var(--color-cyan); }
+  .queue-time { display: flex; align-items: center; gap: 5px; white-space: nowrap; color: var(--color-fg-subtle); font: 9px var(--font-mono); }
+
+  .mechanics-card h2 { color: var(--color-fg); font: 500 22px var(--font-display); letter-spacing: -0.04em; margin: 13px 0 21px; }
+  .mechanic-step { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid var(--color-line); }
+  .mechanic-step > span { color: var(--color-accent); font: 10px var(--font-mono); }
+  .mechanic-step strong { color: var(--color-fg); font: 600 11px var(--font-display); }
+  .mechanic-step p { color: var(--color-fg-muted); font-size: 10px; line-height: 1.4; margin: 4px 0 0; }
+
+  /* Audit ledger ---------------------------------------------------------- */
+  .ledger-overview {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 22px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-line);
+    background: var(--color-card);
+  }
+  .ledger-main-stat { display: flex; flex-direction: column; gap: 7px; padding-right: 30px; border-right: 1px solid var(--color-line); }
+  .ledger-main-stat strong {
+    color: var(--color-fg);
+    font: 500 29px var(--font-display);
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+  }
+  .ledger-trust { display: flex; align-items: center; gap: 11px; color: var(--color-accent); flex: 1; }
+  .ledger-trust div { display: flex; flex-direction: column; gap: 4px; }
+  .ledger-trust strong { color: var(--color-fg); font: 600 11px var(--font-display); }
+  .ledger-trust span { color: var(--color-fg-muted); font-size: 10px; }
+  .ledger-card { padding: 22px 23px 8px; }
+  .live-chip { display: flex; align-items: center; gap: 6px; color: var(--color-accent); font: 9px var(--font-mono); }
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 1.05fr 1.45fr 0.9fr 1.05fr 0.7fr;
+    align-items: center;
+    gap: 12px;
+    min-height: 53px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-fg-muted);
+    font-size: 10px;
+  }
+  .ledger-head {
+    min-height: 36px;
+    border-top: 0;
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font: 600 8px var(--font-mono);
+  }
+  .event-type { color: var(--color-fg); font: 600 9px var(--font-mono); }
+  .outcome { font: 600 9px var(--font-mono); }
+  .outcome.lime   { color: var(--color-accent); }
+  .outcome.cyan   { color: var(--color-cyan); }
+  .outcome.violet { color: var(--color-violet); }
+  .outcome.amber  { color: var(--color-amber); }
+  .outcome.up     { color: var(--color-up); }
+  .outcome.down   { color: var(--color-down); }
+  .outcome.void   { color: var(--color-fg-subtle); }
+
+  /* Settings -------------------------------------------------------------- */
+  .settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .settings-card h2 { color: var(--color-fg); font: 500 22px var(--font-display); letter-spacing: -0.04em; margin: 12px 0 19px; }
+  .settings-card.wide { grid-column: 1 / -1; }
+  .settings-card .full { margin-top: 17px; }
+  .setting-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 48px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-fg-subtle);
+    font-size: 10px;
+  }
+  .setting-field strong { color: var(--color-fg); display: flex; align-items: center; gap: 7px; font: 10px var(--font-mono); }
+  .setting-field .network-dot { background: var(--color-cyan); box-shadow: none; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 62px;
+    border-top: 1px solid var(--color-line);
+  }
+  .toggle-row div { display: flex; flex-direction: column; gap: 4px; }
+  .toggle-row strong { color: var(--color-fg); font: 600 11px var(--font-display); }
+  .toggle-row span { color: var(--color-fg-muted); font-size: 10px; }
+  .toggle { width: 33px; height: 18px; flex: none; padding: 2px; background: var(--color-card-3); border-radius: 20px; transition: background var(--dur) ease; }
+  .toggle span { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--color-fg-subtle); transition: transform var(--dur) ease, background var(--dur) ease; }
+  .toggle.on { background: color-mix(in srgb, var(--color-accent) 36%, transparent); }
+  .toggle.on span { background: var(--color-accent); transform: translateX(15px); }
+
+  .appearance-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .appearance-option {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 11px;
+    align-items: center;
+    text-align: left;
+    padding: 12px;
+    background: var(--color-card-2);
+    border: 1px solid var(--color-line);
+    color: var(--color-fg);
+  }
+  .appearance-option.selected { border-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
+  .appearance-option strong { font: 600 11px var(--font-display); }
+  .appearance-option small { color: var(--color-fg-subtle); font-size: 9px; }
+  .appearance-option svg { grid-column: 3; grid-row: 1 / -1; color: var(--color-accent); }
+  .appearance-swatch { grid-row: 1 / -1; width: 42px; height: 42px; border-radius: 4px; }
+  .dark-swatch { background: linear-gradient(135deg, var(--color-canvas) 35%, var(--color-accent)); }
+  .light-swatch { background: linear-gradient(135deg, #E7E4D6 35%, var(--color-cyan)); }
+}
+
+/* Signal Room responsive rules. Outside @layer so they still beat the
+   layered defaults above regardless of source order in the built sheet. */
+@media (max-width: 1100px) {
+  .sidebar { width: 214px; flex-basis: 214px; }
+  .market-feature { grid-template-columns: 1fr; }
+  .market-image { min-height: 170px; max-height: 190px; }
+  .hero-panel { padding: 38px 34px; }
+  .hero-meta { min-width: 145px; }
+  .lower-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .subpage-heading { align-items: start; flex-direction: column; gap: 20px; }
+  .protocol-grid, .settings-grid { grid-template-columns: 1fr; }
+  .settings-card.wide { grid-column: auto; }
+  .creator-orbit { margin-right: 3%; transform: scale(0.8); }
+  .stat-grid.four { grid-template-columns: repeat(2, 1fr); }
+  .ledger-row { grid-template-columns: 1fr 1.4fr 0.8fr 1fr 0.7fr; }
+}
+
+@media (max-width: 760px) {
+  /* The rail becomes a drawer. signal-room.css owns whether it is visible and
+     where it sits in the stacking order; this is where it comes from. */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: auto;
+    transform: translateX(-100%);
+    box-shadow: 16px 0 40px rgb(0 0 0 / 0.4);
+  }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .mobile-menu, .mobile-close { display: block; }
+  .mobile-scrim { display: block; position: fixed; inset: 0; z-index: 35; background: rgb(0 0 0 / 0.65); }
+
+  .topbar { padding: 0 18px; }
+  .topbar-actions { gap: 8px; }
+  .live-ticker, .breadcrumb span:first-child, .breadcrumb span:nth-child(2) { display: none; }
+  .connect-button { padding: 9px; font-size: 0; }
+  .connect-button svg { margin: 0; }
+  .page-content { padding: 20px 15px 32px; }
+  .page-footer { flex-direction: column; gap: 11px; }
+  .footer-right { justify-content: space-between; }
+
+  .hero-panel { min-height: 480px; padding: 31px 23px; flex-direction: column; }
+  .hero-copy h1 { font-size: 47px; }
+  .hero-copy p { font-size: 12px; }
+  .hero-actions { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .hero-meta { margin-top: auto; align-self: flex-start; padding-left: 14px; }
+
+  .metric-strip { grid-template-columns: repeat(2, 1fr); margin-bottom: 42px; }
+  .metric-item { margin-right: 0; padding: 17px 8px 17px 0; border-right: 0; }
+  .metric-item:nth-child(odd) { border-right: 1px solid var(--color-line); padding-right: 14px; }
+  .metric-item:nth-child(n+3) { border-top: 1px solid var(--color-line); }
+  .metric-item strong { font-size: 23px; }
+
+  .section-heading { align-items: start; gap: 15px; }
+  .section-heading h2 { font-size: 23px; }
+  .section-heading .secondary-button { font-size: 0; padding: 9px; }
+  .section-heading .secondary-button svg { margin: 0; }
+
+  .market-layout { grid-template-columns: 1fr; }
+  .market-feature-body { padding: 22px; }
+  .market-footer { align-items: end; gap: 12px; }
+  .market-footer .secondary-button { font-size: 9px; }
+
+  .table-toolbar { align-items: stretch; flex-direction: column; gap: 12px; }
+  .search-box { width: 100%; }
+  .toolbar-actions { justify-content: space-between; }
+
+  .insight-points { grid-template-columns: 1fr; gap: 18px; }
+
+  .subpage-heading { padding: 15px 0 25px; }
+  .subpage-heading h1 { font-size: 38px; }
+  .subpage-context { align-self: flex-start; }
+  .stat-grid.four { grid-template-columns: repeat(2, 1fr); }
+  .stat-card { padding: 15px 13px; min-height: 97px; }
+  .stat-card strong { font-size: 23px; }
+
+  .subpage-callout, .ledger-overview { align-items: flex-start; flex-wrap: wrap; }
+  .subpage-callout .primary-button { width: 100%; }
+
+  .creator-hero { padding: 27px 23px; min-height: 420px; align-items: flex-start; }
+  .creator-orbit { position: absolute; right: -26px; bottom: -26px; opacity: 0.68; transform: scale(0.75); }
+  .creator-hero h2 { font-size: 36px; }
+  .creator-agent-card { align-items: flex-start; flex-wrap: wrap; }
+  .creator-agent-metrics { margin-left: 43px; }
+  .creator-agent-card .row-action { margin-left: auto; }
+
+  .settlement-status-banner { align-items: flex-start; flex-wrap: wrap; }
+  .settlement-status-banner .status-pill { margin-left: 48px; }
+
+  .ledger-main-stat { padding-right: 0; border-right: 0; width: 100%; }
+  .ledger-trust { flex-basis: 100%; }
+  .ledger-overview .secondary-button { width: 100%; }
+  .ledger-row { grid-template-columns: 1fr 1.4fr 0.8fr; gap: 8px; }
+  .ledger-row > span:nth-child(4), .ledger-head > span:nth-child(4) { display: none; }
+  .ledger-row > span:nth-child(5) { text-align: right; }
+
+  .appearance-options { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   The probability rail: one 0→1 track split at the market's reading.
+   Up fills from the left so its length is P(Up); Down fills the remainder.
+   The bid–ask band sits on the split; "you" is a handle on the same scale.
+   -------------------------------------------------------------------------- */
+.rail {
+  --rail-h: 8px;
+  position: relative;
+  height: var(--rail-h);
+}
+.rail__track {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--color-card-3);
+}
+.rail__up, .rail__down {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.rail__up   { left: 0;  background: var(--color-up); }
+.rail__down { right: 0; background: var(--color-down); }
+
+.rail__spread {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgb(255 255 255 / 0.28);
+  border-left: 1px solid rgb(255 255 255 / 0.6);
+  border-right: 1px solid rgb(255 255 255 / 0.6);
+}
+
+/* The interval fair value is known to lie in when only ONE side of the book is
+   resting: [bid, 1] or [0, ask]. It is not a spread — there is no second side
+   to span — so it is drawn in the neutral foreground token rather than the
+   spread's white, and only the end the book actually stated gets a hard edge.
+   Everything about it says "somewhere in here", which is the whole of what a
+   one-sided book has told anyone. */
+.rail__range {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--color-fg-subtle) 26%, transparent);
+}
+.rail__range--floor { border-left: 1px solid var(--color-fg-muted); }
+.rail__range--ceiling { border-right: 1px solid var(--color-fg-muted); }
+
+.rail__marker {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: calc(var(--rail-h) + 8px);
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+  background: var(--color-fg);
+  box-shadow: 0 0 0 1px rgb(13 17 24 / 0.7);
+  transition: left var(--dur) ease;
+}
+/* The settled outcome, pinned to its own end of the track. Wider and in
+   foreground white so it reads over the market marker it usually sits beside. */
+.rail__marker--outcome { background: var(--color-fg); width: 3px; }
+
+/* Order-book depth, drawn from the size column inward. */
+.depth-bar {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  right: 0;
+  border-radius: 3px;
+  opacity: 0.16;
+  transition: width var(--dur) ease;
+}
+.depth-bar--ask { background: var(--color-down); }
+.depth-bar--bid { background: var(--color-up); }
+
+/* Lifecycle stepper: Submitted → Filled → Active → Settled → Redeemable. */
+.stepper { display: flex; align-items: center; }
+.step {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-fg-subtle);
+  white-space: nowrap;
+}
+.step:last-child { flex: 0 0 auto; }
+.step::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  margin: 0 0.625rem;
+  background: var(--color-line);
+}
+.step:last-child::after { display: none; }
+.step__dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 9999px;
+  background: var(--color-card-3);
+  border: 1px solid var(--color-fg-subtle);
+}
+.step[data-done="true"] { color: var(--color-fg-muted); }
+.step[data-done="true"] .step__dot { background: var(--color-up); border-color: var(--color-up); }
+.step[data-done="true"]::after { background: color-mix(in srgb, var(--color-up) 50%, var(--color-line)); }
+.step[data-current="true"] { color: var(--color-fg); }
+.step[data-current="true"] .step__dot {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Motion. Entry is a short fade; state is a pulse; loading is a sweep.
+   Signal Room's rule: opacity and transform only, nothing decorative loops
+   except the single slow pulse that means "live".
+   -------------------------------------------------------------------------- */
+@keyframes fade-in  { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes sweep { from { background-position: -160% 0; } to { background-position: 260% 0; } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.animate-in { animation: fade-in 260ms var(--ease-out) both; }
+.animate-grow { transform-origin: left center; animation: grow-x 700ms var(--ease-out) both; }
+.live-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* Range input styled as a slider, consistent with the rail handle. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--color-card-3);
+  outline: none;
+  cursor: ew-resize;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-accent-ink);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+  cursor: ew-resize;
+  transition: box-shadow var(--dur) ease;
+}
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-accent) 25%, transparent), 0 1px 3px rgb(0 0 0 / 0.5);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-accent-ink);
+  cursor: ew-resize;
+}
+
+input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+input[type="checkbox"] { accent-color: var(--color-accent); }
+

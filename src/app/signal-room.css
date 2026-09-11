@@ -1,0 +1,276 @@
+/* --------------------------------------------------------------------------
+   Application shell — the states globals.css does not carry.
+
+   globals.css owns the ported Signal Room system, chrome included: .app-shell,
+   .sidebar, .nav-item, .topbar, .connect-button, .page-footer. Nothing here
+   restates any of that. What is here is what the real shell needs and the
+   mock design never had to express:
+
+     - a status chip that can report a degraded or stale indexer, not just a
+       lime dot,
+     - a signing slot that names what actually signs, in place of the
+       design's invented persona,
+     - a rail that scrolls, because this app has nine destinations and the
+       design had six,
+     - a mobile drawer that leaves the tab order when it is closed.
+
+   Unlayered on purpose: globals.css puts the chrome inside @layer components,
+   so these modifiers win without a specificity race.
+   -------------------------------------------------------------------------- */
+
+/* The shell owns this dimension, so it states it: .topbar is 72px, and
+   --header-h is what the rest of the app offsets sticky panels and scroll
+   anchors by. globals.css still carries the pre-shell 60px default. */
+:root {
+  --header-h: 72px;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --header-h: 64px;
+  }
+}
+
+/* --- Rail ----------------------------------------------------------------- */
+
+.brand-lockup {
+  text-decoration: none;
+}
+
+/* Nine items plus the note and the wallet row exceed a short viewport. The
+   nav takes the slack and scrolls; the wallet row stays on the bottom edge. */
+.sidebar-nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 12px;
+}
+
+.nav-item {
+  text-decoration: none;
+}
+
+/* The chain the app is pointed at, and — when the wallet disagrees — the
+   control that fixes it. Not a decorative dropdown. */
+.network-chip {
+  width: 100%;
+  text-align: left;
+}
+
+.network-chip .chip-id {
+  margin-left: auto;
+  color: var(--color-fg-subtle);
+}
+
+/* The rail's signing slot reuses the profile geometry the design drew for a
+   connected wallet. It is a link now, not an identity: nobody signs from this
+   app, so the row says who does and opens the ledger that proves it. */
+a.profile-row {
+  text-decoration: none;
+}
+
+a.profile-row:hover .profile-copy strong {
+  color: var(--color-accent);
+}
+
+/* Pinned rather than inherited: .mono's 0.92em would otherwise beat the
+   layered size below it wherever this row carries hex. */
+.profile-copy strong {
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Topbar --------------------------------------------------------------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: color-mix(in srgb, var(--color-canvas) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.breadcrumb strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The indexer chip reports the block it read and how long ago the answer
+   arrived. Degraded and stale get their own tone, because a chip that is lime
+   whatever happens is worth less than no chip. */
+.live-ticker {
+  font-family: var(--font-mono);
+}
+
+.live-ticker .ticker-age {
+  color: var(--color-fg-subtle);
+  opacity: 0.75;
+}
+
+.live-ticker.is-degraded {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.live-ticker.is-stale {
+  color: var(--color-warn);
+}
+
+.status-dot.is-degraded {
+  background: var(--color-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 18%, transparent);
+}
+
+.status-dot.is-stale {
+  background: var(--color-warn);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-warn) 18%, transparent);
+}
+
+.status-dot.is-unknown {
+  background: var(--color-fg-subtle);
+  box-shadow: none;
+}
+
+/* The connected address is a link out to the explorer, not a call to action,
+   so it drops the lime fill and keeps the button's footprint. */
+.connect-button.is-ghost {
+  border: 1px solid var(--color-line);
+  background: var(--color-card-2);
+  color: var(--color-fg-muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.connect-button.is-ghost:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  background: var(--color-card-3);
+  box-shadow: none;
+  color: var(--color-fg);
+}
+
+.connect-button.is-danger {
+  background: var(--color-danger);
+  color: var(--color-canvas);
+}
+
+.connect-button.is-danger:hover {
+  background: var(--color-danger);
+  box-shadow: 0 7px 22px color-mix(in srgb, var(--color-danger) 20%, transparent);
+}
+
+.connect-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* A wallet error, or a health route that will not vouch for the page below
+   it. Full bleed across the panel so it cannot be mistaken for page content. */
+.shell-alert {
+  padding: 8px clamp(20px, 4vw, 54px);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-danger) 30%, transparent);
+  background: color-mix(in srgb, var(--color-danger) 8%, transparent);
+  color: var(--color-danger);
+  font-size: 12px;
+}
+
+/* --- Footer --------------------------------------------------------------- */
+
+/* The design's footer was one line; this one carries a testnet disclaimer that
+   has to stay readable, so it wraps and sets its own measure. */
+.page-footer {
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 12px;
+}
+
+.page-footer p {
+  max-width: 68ch;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.page-footer .footer-sub {
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.footer-right {
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 11px;
+}
+
+.footer-right a {
+  text-decoration: none;
+  transition: color var(--dur) ease;
+}
+
+.footer-right a:hover {
+  color: var(--color-accent);
+}
+
+/* --- Mobile drawer -------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  /* Above the scrim (z-index 35), and out of the tab order while closed —
+     `visibility` does that without a JS media query. */
+  .sidebar {
+    z-index: 40;
+    visibility: hidden;
+    transition:
+      transform 240ms cubic-bezier(0.23, 1, 0.32, 1),
+      visibility 0s linear 240ms;
+  }
+
+  .sidebar.mobile-open {
+    visibility: visible;
+    transition:
+      transform 240ms cubic-bezier(0.23, 1, 0.32, 1),
+      visibility 0s;
+  }
+
+  /* The scrim covers the page but not its scrolling. */
+  body[data-drawer="open"] {
+    overflow: hidden;
+  }
+
+  /* Out of the flow, so opening the drawer does not push the network chip. */
+  .sidebar-top {
+    position: relative;
+  }
+
+  .mobile-close {
+    position: absolute;
+    top: 24px;
+    right: 14px;
+    margin: 0;
+    padding: 4px;
+  }
+
+  /* globals hides the ticker here to keep the bar clear. A failure still has
+     to reach a phone, so the degraded state comes back. */
+  .live-ticker.is-degraded {
+    display: flex;
+  }
+
+  /* globals collapses button labels to icons at this width; these two are
+     text-only, so they keep their type. */
+  .connect-button.is-ghost,
+  .connect-button.is-danger {
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+
+  .shell-alert {
+    padding: 8px 18px;
+  }
+
+  .page-footer {
+    margin-top: 40px;
+  }
+}
