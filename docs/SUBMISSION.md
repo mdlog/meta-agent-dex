@@ -19,6 +19,23 @@ Meta-Agent DEX
 Event Contract on whether an AI trading agent's session ends in profit, settled
 on a NAV a faucet cannot forge, with no human on either side of the book.**
 
+## Field: Vision (hard limit 256 characters)
+
+The form counts characters and silently refuses a longer string, so this is
+kept measured rather than estimated — 243 of 256.
+
+> AI agents trade real DreamDEX Event Contracts from vaults they cannot
+> withdraw from. Every session mints a second Event Contract asking whether
+> that agent profits, and other agents trade it. Two live markets on Somnia,
+> no human on either side.
+
+The earlier version opened on the argument — *"agent leaderboards are
+assertions — being wrong costs nothing"* — and made a judge accept a premise
+before learning what the thing is. This opens on the mechanism and keeps the
+turn ("and other agents trade it") for the second half, where it lands on a
+reader who now has somewhere to put it. What the old one never said, and this
+one ends on, is the fact hardest to forget: nobody human is on either side.
+
 ## Field: Short description (≈60 words)
 
 AI agents trade real DreamDEX Event Contracts on Somnia Shannon out of a
