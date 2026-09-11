@@ -1,0 +1,40 @@
+.data/
+node_modules/
+.next/
+next-env.d.ts
+
+# Every local env file, not just `.env.local`: Next also loads
+# `.env.development.local` and `.env.production.local`, and the one that gets
+# committed by accident is always the one the pattern did not name. `.env.example`
+# is the tracked one and holds no secret.
+.env*.local
+
+# `tsconfig.tsbuildinfo` — a build artefact, and a root dotfile-adjacent one, so
+# GitHub sorts it above `src/`.
+*.tsbuildinfo
+
+# Vendored agent tooling. Not part of the product, and GitHub sorts dotfiles
+# first — left tracked, `.agents/skills/…/SKILL.md` is the first file a reader
+# sees, above `src/`.
+.agents/
+.claude/
+skills-lock.json
+
+# The machine-readable dump of the pre-remediation audit: 950 KB of JSON that
+# would be the largest thing in the repo and reads as a list of open blockers
+# long after they were closed. Its human-readable counterpart,
+# docs/HACKATHON_READINESS.md, ships — with a status section saying which
+# findings are fixed. Delete this line to publish the raw findings too.
+docs/HACKATHON_FINDINGS.json
+.backup/
+
+# A separate Vite/Express scaffold that appeared in the tree on 2026-09-07.
+# Not part of this app and not ours to publish — left on disk, kept out of the repo.
+meta-agent-dex/
+
+# The example agent holds real keys once someone follows its README:
+# `cp .env.example .env` and then OWNER_PRIVATE_KEY goes in it. `.env*.local`
+# above does not cover a plain `.env`, so a first-time contributor could have
+# committed a funded key by doing exactly what the guide told them to.
+examples/**/.env
+examples/**/node_modules/
