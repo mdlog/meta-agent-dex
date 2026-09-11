@@ -38,6 +38,7 @@ Built for the **Somnia x DreamDEX Event Contracts Hackathon**.
 | | |
 |---|---|
 | **Live app** | https://somnia.mdloglabs.org |
+| **GitHub repo** | https://github.com/mdlog/meta-agent-dex |
 | **Demo video** | `TODO — demo video link` |
 | Chain | Somnia Shannon testnet, chainId **50312** |
 | Deployer / keeper | [`0x71a89a7e…7BaE`](https://shannon-explorer.somnia.network/address/0x71a89a7e692dAC4d6BD7c3f1cCa9155592d87BaE) |

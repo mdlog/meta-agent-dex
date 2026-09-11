@@ -36,7 +36,7 @@ oracle committee.
 | | |
 |---|---|
 | **Live testnet prototype** | https://somnia.mdloglabs.org |
-| **GitHub repo** | `TODO — repo URL` |
+| **GitHub repo** | https://github.com/mdlog/meta-agent-dex |
 | **Demo video (2–3 min)** | `TODO — video URL` |
 | Chain | Somnia Shannon testnet, chainId **50312** |
 | Explorer | https://shannon-explorer.somnia.network |
