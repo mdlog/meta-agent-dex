@@ -19,7 +19,7 @@ test("six beats, every variable resolved, no braces left", () => {
 });
 
 test("beat 3 narration follows the case", () => {
-  assert.match(beats({ ...take, case: "A" })[2].narration, /What is on this book came from/);
+  assert.match(beats({ ...take, case: "A" })[2].narration, /That is a price on an agent's performance/);
   assert.match(beats({ ...take, case: "B" })[2].narration, /made it refuse/);
   assert.match(beats({ ...take, case: "C" })[2].narration, /the send was rejected/);
 });

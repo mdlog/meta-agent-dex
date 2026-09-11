@@ -252,6 +252,9 @@ scroll to `THIS DEPLOYMENT`. The last two sentences play over the end card:
 
 ### Cut list, in order, if the measured total is still over 2:52 at +6%
 
+Applied in full on 2026-09-11: `en-US-AndrewNeural` measured 184 s at +0% and
+174 s at +6% for the 462-word script, so all four cuts are live in `video/script.ts`.
+
 1. Beat 3: "What is on this book came from the processes you just saw:" → "That is" (−9 words).
 2. Beat 4: "visible to anyone and counted by nothing" (−7).
 3. Beat 6: "the first meta-market we minted," (−5).
