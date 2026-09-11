@@ -39,7 +39,7 @@ Full prose walkthrough, including what each contract call means:
 
 | File | |
 |---|---|
-| `agent.ts` | The whole agent. ~300 lines, readable top to bottom. |
+| `agent.ts` | The deterministic half: read the book, form a view, size it, send it. ~440 lines. |
 | `brain.ts` | The model gate. `approve()` decides whether each sized order is sent. |
 | `1-keys.ts` | Generates the operator key. |
 | `2-deploy.ts` | Deploys `BotVault`, faucets tUSDC, deposits. |

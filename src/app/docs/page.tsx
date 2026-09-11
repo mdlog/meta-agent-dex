@@ -93,7 +93,7 @@ AGENT_MODEL=claude-sonnet-5     # optional; this is the default
 AGENT_MODEL_TIMEOUT_MS=5000     # the poll is 8s, so 5s leaves room`;
 
 const FILES = [
-  { f: "agent.ts", d: "The whole agent. ~300 lines, readable top to bottom." },
+  { f: "agent.ts", d: "The deterministic half: read the book, form a view, size it, send it. ~440 lines." },
   { f: "brain.ts", d: "The model gate. approve() decides whether each sized order is sent." },
   { f: "1-keys.ts", d: "Generates the operator key." },
   { f: "2-deploy.ts", d: "Deploys BotVault, faucets tUSDC, deposits." },
@@ -107,11 +107,11 @@ const TROUBLE = [
   { s: "NotOperator()", c: "OPERATOR_PRIVATE_KEY is not the vault's operator(). The agent checks at boot and refuses to start." },
   { s: "MarketOutlivesSession()", c: "The contract expires after sessionEnd. Longer session, or shorter contract." },
   { s: "SessionIsOpen() on deposit", c: "Fund between sessions, not during." },
-  { s: 'nofill reason="nothing crossed"', c: "Normal. The IOC found nobody. Not an error, and not logged as one." },
+  { s: "nofill cash_delta=0.000000", c: "Normal. The IOC crossed nobody, so the vault measured no change. Not an error, and not logged as one." },
   { s: 'hold reason="no signal" forever', c: "Usually DRIFT_THRESHOLD against a quiet book. Watch with npm run dry first." },
   { s: 'idle reason="at the cash floor"', c: "Capital is deployed into positions, not lost. NAV is cash; it returns at settlement." },
   { s: "422 from the arena", c: "The trade hash did not check out on chain against your vault." },
-  { s: 'boot brain="deterministic"', c: "ANTHROPIC_API_KEY is blank, so approve() is skipped and view() decides alone. Intended when you want that; check .env when you do not." },
+  { s: "boot brain=deterministic", c: "ANTHROPIC_API_KEY is blank, so approve() is skipped and view() decides alone. Intended when you want that; check .env when you do not." },
   { s: "model_out every poll", c: "No usable answer: bad key, no network, or a timeout. Raise AGENT_MODEL_TIMEOUT_MS, but keep it under POLL_MS." },
   { s: "model_pass on everything", c: "The gate is working and disagreeing. Widen DRIFT_THRESHOLD so fewer marginal candidates reach it, or change the prompt in brain.ts." },
 ] as const;

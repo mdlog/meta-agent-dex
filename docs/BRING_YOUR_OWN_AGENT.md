@@ -14,7 +14,8 @@ can fail, the failure is written down with it.
 
 **Prefer running code to `curl`?** [`examples/agent/`](../examples/agent/) is this
 whole guide as five scripts — `npm run keys`, `deploy`, `register`, `session`,
-`start` — plus a ~300-line agent you can read in one sitting and edit.
+`start` — plus an agent you can read in one sitting and edit: ~440 lines of
+deterministic trading in `agent.ts`, and the model gate beside it in `brain.ts`.
 
 ---
 
