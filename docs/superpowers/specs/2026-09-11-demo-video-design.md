@@ -102,8 +102,9 @@ Variables written for the narration: `{agent}`, `{sOpen}`, `{sSettled}`,
 
 ## 5. Shot list and narration
 
-Budget: 460 words at ~160 wpm ≈ 2:52 of speech; the cards and the explorer hold
-sit under narration, so they add no time; six 0.4 s gaps add 2.4 s. Rule: after
+Budget: 462 words at ~160 wpm ≈ 2:53 of speech (spoken numbers add ~3 s); the
+cards and the explorer hold sit under narration, so they add no time; six 0.4 s
+gaps add 2.4 s. Word counts below are exact, counted after trimming. Rule: after
 `tts.py` measures the real total, if it exceeds **2:52**, re-render at rate
 `+6%`; if still over, apply the cut list at the end of this section, in order.
 
@@ -112,7 +113,7 @@ Captions: the narration split at clause boundaries into cues of ≤ 2 lines ×
 in the top-right shows the public path (`meta-agent.mdloglabs.org/agents/kestrel-7`)
 because the address bar is not part of the recording.
 
-### Beat 1 — what this is — `/` — 68 words
+### Beat 1 — what this is — `/` — 67 words
 
 Title card for 3 s (narration starts at 0.5 s): **Meta-Agent DEX** · *Agents
 trade. Other agents price the traders.* · Somnia × DreamDEX Event Contracts
@@ -126,10 +127,9 @@ leaderboard`; hold. Numbers on the strip are not read aloud.
 > bot's track record from a screenshot, and nobody could put a price on one.
 > Meta-Agent DEX's answer is a second layer: a native Event Contract on whether
 > an agent's session ends with more money than it started — and a second set of
-> agents that trade it. Every transaction here is signed by a program. There is
-> no trade ticket.
+> agents that trade it. Every transaction here is signed by a program.
 
-### Beat 2 — the agents being measured — `/agents` + terminal — 60 words
+### Beat 2 — the agents being measured — `/agents` + terminal — 59 words
 
 `/agents` (`SIGNAL INDEX` / `Agent leaderboard`): hover the `Finished` column
 header, then `{agent}`'s row. Cut to the terminal (§6, runner window, ~6 s).
@@ -139,12 +139,12 @@ agents is never spoken — the board has eleven today and had three when the
 runbook was written.
 
 > Every trading agent has its own vault and its own key, and is ranked on
-> sessions it finished — not on what it holds. NAV is nav() on the vault
-> contract, never a token balance. Here is one of them deciding, one line per
+> sessions it finished — not on what it holds. NAV is nav() on the vault, never
+> a token balance. Here is one of them deciding, one line per
 > decision. The key it holds can call exactly one function on its vault —
 > trade. It cannot withdraw.
 
-### Beat 3 — the agents that price the agents — `/market/{openId}` + terminals — 87 words
+### Beat 3 — the agents that price the agents — `/market/{openId}` + terminals — 99 words on case A (B 105, C 102 — the cut list covers the difference)
 
 Market page: hover the symbol (`BOTNAV-90m@…`) and the question; hover the
 `This contract prices` panel (`NAV at open`, `Vault cash now`); scroll to `How
@@ -154,35 +154,37 @@ two-pane terminal (backer | skeptic, §6, ~6 s). Back to the market page,
 `reload`, hover the order-book panel. The first two sentences are shared; the
 third differs by case.
 
-> This is the contract on the agent: ticker BOTNAV — will {agent} close session
-> {sOpen} with a higher NAV? It is the same market page as any BTC contract
-> here, because it is a native DreamDEX Event Contract, minted with
-> scheduleAndCreateMarket on an operator and venue we registered ourselves.
+> This is the contract on the agent: will {agent} close session {sOpen} with a
+> higher NAV? It is the same market page as any BTC contract, because it is a
+> native DreamDEX Event Contract — minted with scheduleAndCreateMarket on an
+> operator and venue we registered ourselves.
 
-**Case A — quotes on the book** (the runbook's good take):
+**Case A — quotes on the book** (the runbook's good take; worded so it stays
+true when only one thesis quoted — the backer refuses a losing record by design,
+so a skeptic-only book is the likely shape of A):
 
 > Orders reach this book from the two reference speculator agents we ship — a
-> backer and a skeptic — reading the same evidence and disagreeing, and each
-> names the clause behind every decision. Those levels were put there by the
-> two processes you just saw: a price on an agent's performance, formed by two
-> programs that staked collateral to say it.
+> backer and a skeptic — each reading the same evidence and naming the clause
+> behind its decision. What is on this book came from the processes you just
+> saw: a price on an agent's performance that a program staked collateral to
+> state.
 
 **Case B — the thesis refused** (book empty, `refuse` lines on screen; the rail
 reads `No quote on this contract yet`):
 
-> The book is empty, and the terminal says exactly why: the two reference
-> speculators we ship — a backer and a skeptic — read the same evidence, and
-> each names the clause that made it refuse. A refusal is a decision. Anyone can
-> run one against this venue, and the first quote to accept this contract is
-> the one that sets its price.
+> The book is empty, and the terminal says why: the two reference speculators
+> we ship — a backer and a skeptic — read the same evidence, and each names the
+> clause that made it refuse. A refusal is a decision, and the first quote to
+> accept this contract is the one that sets its price. Anyone can run one
+> against this venue.
 
-**Case C — orders rejected** (book empty, `intent` then `error order` on screen):
+**Case C — orders rejected** (book empty, `intent` then `error order` on screen;
+the narration names no cause, because the cause is not established — see §9):
 
-> The book is empty, and the terminal says exactly why: the two reference
-> speculators we ship — a backer and a skeptic — priced this contract and
-> signed an order, and the public RPC rejected the send: the write-path issue
-> documented in our SDK feedback. The pricing is real and the contract is real;
-> the gap between them is one RPC.
+> The book is empty, and the terminal says why: the two reference speculators
+> we ship — a backer and a skeptic — priced this contract and signed an order,
+> and the send was rejected. The log shows the error instead of hiding it. The
+> pricing is real, the contract is real, and the rejection is on the record too.
 
 "Reference speculators we ship" is deliberate: both keys are ours, and the
 launcher (`scripts/start-speculators.ts`) wound the layer down on 2026-09-08
@@ -191,7 +193,7 @@ itself. The narration never calls them independent, and `Run one against this
 venue` is on screen when it says anyone can run one. See §9 for the decision
 this leaves open.
 
-### Beat 4 — the number that settles, and the number that cannot — `/agents/{slug}` — 87 words
+### Beat 4 — the number that settles, and the number that cannot — `/agents/{slug}` — 85 words
 
 Profile: scroll to `THE NUMBER THAT SETTLES`; hover `Cash · nav()` (the label
 while a session is live) then `Unaccounted · unaccounted()` and its caption
@@ -202,15 +204,15 @@ first `Transaction` link; the Shannon explorer loads; **hold 2 s**. The faucet
 measurement (10,197.91 / 197.91 / 10,000.00) is not on this page, so it is not
 spoken here — it moves to Beat 6, where the rows that show it are on screen.
 
-> NAV is not a balance. Somnia's test collateral has a permissionless faucet:
-> ten thousand per call, no cooldown. If NAV were a token balance, a stranger
+> NAV is not a balance. Somnia's test collateral has a permissionless faucet —
+> ten thousand per call. If NAV were a token balance, a stranger
 > could forge an agent's profit for free. So nav() counts only collateral a
 > DreamDEX call delivered; anything else lands in unaccounted(), visible to
 > anyone and counted by nothing. The operator key may only call trade;
 > withdrawals belong to a different owner. Every row in the tape is a real IOC
-> order on a live contract — here is one, on the Shannon explorer.
+> order on a live contract — here is one on the explorer.
 
-### Beat 5 — settlement, on a session that already settled — `/market/{settledId}` → `/settlement` — 78 words
+### Beat 5 — settlement, on a session that already settled — `/market/{settledId}` → `/settlement` — 75 words
 
 Resolved market: hover the `Resolved` pill; hover `This contract prices`
 (`NAV at open`, and the sentence `The oracle answered YES, and DreamDEX's
@@ -229,30 +231,31 @@ committee.`
 > and DreamDEX paid the {paid} side. Settlement is defined by code and attested
 > by DreamDEX's oracle committee.
 
-### Beat 6 — the receipts, then stop — `/audit` → end card — 80 words
+### Beat 6 — the receipts, then stop — `/audit` → end card — 77 words
 
 `/audit`: hover `MINED AND CHECKED BEFORE THE DEMO`; scroll to `NAV INTEGRITY`
 and hover the three rows under `A wallet top-up cannot move NAV`
-(`balanceOf(vault) 10,197.91`, `nav() 197.91`, `unaccounted() 10,000.00`);
+(`balanceOf(vault) 10,197.91`, `nav() 197.91`, `unaccounted() 10,000.00` — the
+numbers stay on screen rather than in the narration, where spoken decimals cost
+~1.5 s each);
 scroll to `THIS DEPLOYMENT`. The last two sentences play over the end card:
 **Meta-Agent DEX** · meta-agent.mdloglabs.org · github.com/mdlog/meta-agent-dex ·
 *Every number in this video is on /audit.* Hold 1 s of silence, end.
 
 > Every claim here is a transaction on this page: the operator and venue we
 > registered, the first meta-market we minted, and the faucet test — ten
-> thousand tUSDC pushed into a live vault; the balance read 10,197.91 and nav()
-> stayed at 197.91. Every agent anyone deploys generates a new,
-> machine-resolvable question every session, and DreamDEX settles it on its own
-> rails. Agents trade it, agents price it, a contract measures it — and nothing
-> in that loop waits for somebody to click.
+> thousand tUSDC pushed into a live vault, and nav() moved by exactly zero.
+> Every agent anyone deploys generates a new, machine-resolvable question every
+> session, and DreamDEX settles it on its own rails. Agents trade it, agents
+> price it, a contract measures it — and nothing in that loop waits for
+> somebody to click.
 
 ### Cut list, in order, if the measured total is still over 2:52 at +6%
 
-1. Beat 3: "and each names the clause behind every decision" (−8 words).
-2. Beat 6: "the balance read 10,197.91 and nav() stayed at 197.91" → "and it moved nav() by exactly zero" (−4).
-3. Beat 1: "There is no trade ticket." (−5).
-4. Beat 4: "no cooldown" (−2).
-5. Beat 2: "It cannot withdraw." (−3).
+1. Beat 3: "What is on this book came from the processes you just saw:" → "That is" (−9 words).
+2. Beat 4: "visible to anyone and counted by nothing" (−7).
+3. Beat 6: "the first meta-market we minted," (−5).
+4. Beat 2: "It cannot withdraw." (−3).
 
 ## 6. Terminal shots
 
@@ -313,14 +316,18 @@ npm run speculators                          # default AGENT_WIND_DOWN=1
 
 Two facts the reviewer should weigh before the take:
 
-- **The order path has been failing since 2026-09-08.** After the last
-  `resting` line (backer 16:20Z, skeptic 11:11Z) every speculator order — 797
-  attempts, normal sizes, 10,747 tUSDC of balance — came back `Missing or
-  invalid parameters` on the viem path that `bots/send.ts` adopted because the
-  SDK path fails the same way. The runners never see this error. If it recurs,
-  the take is case C, and the honest narration for it is above. Diagnosing it
-  is a separate task, and worth doing before recording if the good take
-  matters.
+- **Speculator orders have both landed and failed, and the logs alone
+  mislead.** Commit `135ce61` checked the chain: the skeptic key shows 27
+  `placeBinaryOrder` calls and one order matched against an unaffiliated
+  counterparty, so the second layer has traded. The same logs also hold 797
+  `Missing or invalid parameters` rejections since 2026-09-08 (normal sizes,
+  10,747 tUSDC of balance), and the backer thesis refuses any agent whose
+  finished record is losing — which this fleet's is. So a restart most likely
+  yields case B (refusals on screen), A if the skeptic quotes, and C if the
+  rejections recur. All three are filmable and none of the narrations claims a
+  cause. What is known to fail is `redeem` (`InsufficientPermission`: the
+  speculator EOAs never granted the module ERC-6909 operator rights), which the
+  video does not touch.
 - **Wind-down was a product decision, not an accident.** The launcher's comment
   says a speculator taking the other side of a market this project minted is
   the project trading with itself. Case B with the wind-down framing is a
