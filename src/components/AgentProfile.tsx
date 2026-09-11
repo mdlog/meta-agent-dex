@@ -523,7 +523,14 @@ export function AgentProfile({ slug }: { slug: string }) {
                     Real orders on DreamDEX BTC and ETH Event Contracts, signed by the operator key
                     and paid out of the vault.
                     {tapeSession !== null && " This is one session's tape, not the agent's whole history."}
-                    {trades.length > TAPE_LIMIT && ` Showing the ${TAPE_LIMIT} most recent.`}
+                    {/* Named with its denominator. The tab beside this reads
+                        "Trades · 58" and the table below it draws 25, and a
+                        reader who trusts the tab counts the rows and finds the
+                        page wrong about itself. "Showing the 25 most recent"
+                        was true and reconciled nothing, because it never said
+                        of how many. */}
+                    {trades.length > TAPE_LIMIT &&
+                      ` Showing the ${TAPE_LIMIT} most recent of ${trades.length}.`}
                     {/* The totals, because the tape above is one window and an
                         empty one reads as a lost record rather than a new
                         session. Every order ever signed is still in the journal
