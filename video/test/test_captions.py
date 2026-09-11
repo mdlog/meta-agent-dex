@@ -27,5 +27,12 @@ class Cues(unittest.TestCase):
             self.assertLessEqual(a["end"], b["start"] + 1e-6)
         self.assertGreaterEqual(cs[-1]["end"] - cs[-1]["start"], 1.2)
 
+class Punctuation(unittest.TestCase):
+    def test_words_take_their_spelling_from_the_text(self):
+        words = W("Meta Agent DEX's answer is nav on the vault never a token balance")
+        out = captions.attach_punctuation(words, "Meta-Agent DEX's answer is nav() on the vault, never a token balance.")
+        self.assertEqual([w["text"] for w in out], ["Meta-Agent", "DEX's", "answer", "is", "nav()", "on", "the", "vault,", "never", "a", "token", "balance."])
+        self.assertAlmostEqual(out[0]["end"], words[1]["end"])  # "Agent" merged into "Meta-Agent"
+
 if __name__ == "__main__":
     unittest.main()

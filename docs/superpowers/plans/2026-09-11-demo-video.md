@@ -31,7 +31,7 @@
 **Interfaces:**
 - Produces: a working `import { chromium } from "playwright"` from any `video/*.ts`; `python3 -c "import edge_tts"`.
 
-- [ ] **Step 1: Create the package and ignore files**
+- [x] **Step 1: Create the package and ignore files**
 
 `video/package.json`:
 ```json
@@ -59,22 +59,22 @@ video/out/
 video/node_modules/
 ```
 
-- [ ] **Step 2: Install**
+- [x] **Step 2: Install**
 
 Run: `npm --prefix video install --no-audit --no-fund && pip3 install --user --quiet edge-tts`
 Expected: `added 2 packages` (playwright + playwright-core); pip prints nothing.
 
-- [ ] **Step 3: Verify the browser binary is the cached one, not a download**
+- [x] **Step 3: Verify the browser binary is the cached one, not a download**
 
 Run: `node --experimental-strip-types -e 'import("playwright").then(async p => { const b = await p.chromium.launch(); console.log("chromium", b.version()); await b.close(); })'` from `video/` (`cd video && … && cd ..`).
 Expected: prints `chromium 1xx.x.xxxx.xx` with no "Executable doesn't exist" error. If it errors, run `npx --prefix video playwright install chromium` (it will find `~/.cache/ms-playwright/chromium-1228`).
 
-- [ ] **Step 4: Verify edge-tts, ffmpeg, fonts**
+- [x] **Step 4: Verify edge-tts, ffmpeg, fonts**
 
 Run: `python3 -c "import edge_tts, sys; print('edge-tts', edge_tts.__version__ if hasattr(edge_tts,'__version__') else 'ok')" && ffmpeg -hide_banner -version | head -1 && fc-list | grep -c -i "inter"`
 Expected: three non-error lines.
 
-- [ ] **Step 5: README skeleton**
+- [x] **Step 5: README skeleton**
 
 `video/README.md`:
 ```markdown
@@ -98,7 +98,7 @@ Tests: `node --experimental-strip-types --test video/test/*.test.ts` and
 `python3 -m unittest discover -s video/test -p "test_*.py"`.
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add .gitignore video/package.json video/package-lock.json video/.gitignore video/README.md
@@ -130,7 +130,7 @@ git commit -m "chore(video): scaffold the demo video pipeline package"
   ```
 - CLI: `node --experimental-strip-types video/script.ts --narration` reads `video/out/take.json`, prints `narrationFor(take)` as JSON.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `video/test/script.test.ts`:
 ```ts
@@ -178,12 +178,12 @@ test("narrationFor carries delay and minimum visual length", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `node --experimental-strip-types --test video/test/script.test.ts`
 Expected: FAIL — `Cannot find module '../script.ts'`.
 
-- [ ] **Step 3: Write `video/script.ts`**
+- [x] **Step 3: Write `video/script.ts`**
 
 ```ts
 /**
@@ -409,12 +409,12 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(im
 }
 ```
 
-- [ ] **Step 4: Run the test**
+- [x] **Step 4: Run the test**
 
 Run: `node --experimental-strip-types --test video/test/script.test.ts`
 Expected: 4 passing.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add video/script.ts video/test/script.test.ts
@@ -440,7 +440,7 @@ git commit -m "feat(video): beats, actions and narration as one script"
   ```
 - CLI writes `video/out/take.json`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `video/test/select.test.ts`:
 ```ts
@@ -473,12 +473,12 @@ test("fmtUsdc renders 6-decimal integers with two decimals", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `node --experimental-strip-types --test video/test/select.test.ts`
 Expected: FAIL — cannot find `../select.ts`.
 
-- [ ] **Step 3: Write `video/select.ts`**
+- [x] **Step 3: Write `video/select.ts`**
 
 ```ts
 /**
@@ -609,17 +609,17 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(im
 }
 ```
 
-- [ ] **Step 4: Run the unit tests**
+- [x] **Step 4: Run the unit tests**
 
 Run: `node --experimental-strip-types --test video/test/select.test.ts`
 Expected: 3 passing.
 
-- [ ] **Step 5: Run it for real**
+- [x] **Step 5: Run it for real**
 
 Run: `node --experimental-strip-types video/select.ts`
 Expected: prints a take with `agent.slug` (today `kestrel-7`), `settledMarketId` ending `1a16e`, `navT0 "225.64"`, `answer "YES"`, `paid "Up"`, and a `case` line. `video/out/take.json` exists.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add video/select.ts video/test/select.test.ts
@@ -645,7 +645,7 @@ git commit -m "feat(video): select the agent, markets and Beat-3 case from the l
   ```
 - `terminal.html` exposes `window.render({ panes: [{ title, lines: TermLine[] }], intervalMs }): Promise<void>`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `video/test/logs.test.ts`:
 ```ts
@@ -687,12 +687,12 @@ test("guard passes tx= hashes and refuses a bare 64-hex value", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `node --experimental-strip-types --test video/test/logs.test.ts`
 Expected: FAIL — cannot find `../logs.ts`.
 
-- [ ] **Step 3: Write `video/logs.ts`**
+- [x] **Step 3: Write `video/logs.ts`**
 
 ```ts
 /** Picks verbatim lines out of the bots' logfmt logs for the terminal shots. */
@@ -735,12 +735,12 @@ export function guard(lines: TermLine[]): TermLine[] {
 }
 ```
 
-- [ ] **Step 4: Run the test**
+- [x] **Step 4: Run the test**
 
 Run: `node --experimental-strip-types --test video/test/logs.test.ts`
 Expected: 4 passing.
 
-- [ ] **Step 5: Write `video/terminal.html`**
+- [x] **Step 5: Write `video/terminal.html`**
 
 ```html
 <!doctype html>
@@ -801,7 +801,7 @@ Expected: 4 passing.
 </script>
 ```
 
-- [ ] **Step 6: Write `video/preview.ts` and look at the result**
+- [x] **Step 6: Write `video/preview.ts` and look at the result**
 
 ```ts
 /** Screenshots the terminal and the two cards so a human can look before the take. */
@@ -848,7 +848,7 @@ console.log("previews in", dir);
 Run (after Task 5 adds `cards.html`; for now expect the terminal PNGs and a cards error): `node --experimental-strip-types video/preview.ts`
 Expected: `video/out/preview/terminal-runner.png` and `terminal-speculators.png` exist. Open them with the Read tool: 8 runner lines ending in `filled`; two panes with 6 lines each; nothing clipped horizontally; text legible.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add video/logs.ts video/terminal.html video/preview.ts video/test/logs.test.ts
@@ -865,7 +865,7 @@ git commit -m "feat(video): render verbatim runner and speculator log lines as t
 **Interfaces:**
 - `window.render({ card: "title" | "end" })`.
 
-- [ ] **Step 1: Write the page**
+- [x] **Step 1: Write the page**
 
 ```html
 <!doctype html>
@@ -908,12 +908,12 @@ git commit -m "feat(video): render verbatim runner and speculator log lines as t
 </script>
 ```
 
-- [ ] **Step 2: Preview and look**
+- [x] **Step 2: Preview and look**
 
 Run: `node --experimental-strip-types video/preview.ts`
 Expected: `video/out/preview/card-title.png` and `card-end.png`. Read both: headline not clipped, footer inside the frame, no fallback serif font.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add video/cards.html
@@ -937,7 +937,7 @@ git commit -m "feat(video): title and end cards"
   `segmentS = max(audioS + delayMs/1000 + 0.4, minVisualMs/1000)`; the recorder holds each beat to `segmentS` and `build.py` trims to it.
 - Pure helper `segment_seconds(audio_s, delay_ms, min_visual_ms)` and `apply_rule(total_s, rate)` for tests.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `video/test/test_tts.py`:
 ```python
@@ -959,12 +959,12 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `python3 -m unittest discover -s video/test -p "test_*.py"`
 Expected: FAIL — `No module named 'tts'`.
 
-- [ ] **Step 3: Write `video/tts.py`**
+- [x] **Step 3: Write `video/tts.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -1063,13 +1063,13 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 4: Run the unit test, then the real render**
+- [x] **Step 4: Run the unit test, then the real render**
 
 Run: `python3 -m unittest discover -s video/test -p "test_*.py"` → 2 passing.
 Run: `python3 video/tts.py`
 Expected: six lines of per-beat durations, a total ≤ 172 s (or one re-render at +6%), and `video/out/audio/index.json`. Listen-check is not possible here; instead confirm `ffprobe` durations are plausible (Beat 1 ≈ 24–28 s) and that each `.words.json` has > 40 entries.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add video/tts.py video/test/test_tts.py
@@ -1093,7 +1093,7 @@ git commit -m "feat(video): edge-tts narration with word timings and the length 
   `route: ""` hides the chip (cards, terminal).
 - `--probe`: runs every action with zero waits, no video, and reports the selectors that did not resolve; exit 1 if any.
 
-- [ ] **Step 1: Write `video/record.ts`**
+- [x] **Step 1: Write `video/record.ts`**
 
 ```ts
 /**
@@ -1302,17 +1302,17 @@ async function main() {
 main().catch((e) => { console.error(String(e instanceof Error ? e.message : e)); process.exit(1); });
 ```
 
-- [ ] **Step 2: Probe**
+- [x] **Step 2: Probe**
 
 Run: `node --experimental-strip-types video/record.ts --probe`
 Expected: `probe ok: every selector resolved`. If it lists unresolved selectors, fix them **in `script.ts`** by reading the component (`grep -rn "<text>" src/`) — the copy on screen wins, never the other way round. Typical fixes: the tape hidden behind a tab (add a `click` on the tab before `scrollTo th:has-text("Transaction")`), `text=Resolved` matching a sidebar word (tighten to the pill's element).
 
-- [ ] **Step 3: Record one beat and look at frames**
+- [x] **Step 3: Record one beat and look at frames**
 
 Run: `node --experimental-strip-types video/record.ts --only=01-what-this-is && ffmpeg -hide_banner -loglevel error -y -i video/out/clips/01-what-this-is.webm -vf "fps=1/3,scale=640:-1,tile=4x3" video/out/preview/beat1-frames.png`
 Expected: a contact sheet with the title card, then the hero, the hovered `Reading Somnia`, and the metric strip. Read the PNG. If text is soft, switch `recordVideo` to a `page.screenshot` loop at 30 fps (the spec's fallback) before recording the rest.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add video/record.ts
@@ -1332,7 +1332,7 @@ git commit -m "feat(video): playwright recorder driven by the narration's word t
 - Produces: `out/captions.ass`, `out/captions.srt`, `out/timeline.json` (`[{id, startS, segmentS}]`).
 - Pure: `cues(words, offset_s, delay_s, max_chars=42, max_lines=2, min_s=1.2) -> list[dict(start,end,text)]`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `video/test/test_captions.py`:
 ```python
@@ -1369,12 +1369,12 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `python3 -m unittest discover -s video/test -p "test_*.py"`
 Expected: FAIL — `No module named 'captions'`.
 
-- [ ] **Step 3: Write `video/captions.py`**
+- [x] **Step 3: Write `video/captions.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -1471,12 +1471,12 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 4: Run the tests, then the real thing**
+- [x] **Step 4: Run the tests, then the real thing**
 
 Run: `python3 -m unittest discover -s video/test -p "test_*.py"` → 5 passing (2 tts + 3 captions).
 Run: `python3 video/captions.py` → `N cues, total ≤ 180s`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add video/captions.py video/test/test_captions.py
@@ -1494,7 +1494,7 @@ git commit -m "feat(video): captions and route chip from the narration's word ti
 - Consumes: `out/clips/*.webm`, `out/audio/*.mp3`, `out/timeline.json`, `out/captions.ass`.
 - Produces: `out/meta-agent-dex-demo.mp4`, `out/meta-agent-dex-demo.srt` (copy of `captions.srt`), `out/contact.png`.
 
-- [ ] **Step 1: Write `video/build.py`**
+- [x] **Step 1: Write `video/build.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -1557,19 +1557,19 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Build**
+- [x] **Step 2: Build**
 
 Run: `python3 video/build.py`
 Expected: six segment lines, then `meta-agent-dex-demo.mp4: NNN.Ns, 1920,1080,30/1` and `ok: under 3:00`.
 
-- [ ] **Step 3: Verify (spec §10)**
+- [x] **Step 3: Verify (spec §10)**
 
 1. Read `video/out/contact.png`: no `SIMULATED DATA` bar, no empty table where the spec expects rows, no 404, captions inside the frame and not overlapping the chip, the chip route matches the page.
 2. `grep -c "^[0-9]" video/out/meta-agent-dex-demo.srt` equals `grep -c "Style: Cap" ...` hmm — simpler: `python3 -c "import re;a=open('video/out/captions.ass').read().count(',Cap,');b=open('video/out/meta-agent-dex-demo.srt').read().count('-->');print(a,b);assert a==b"`.
 3. `ffprobe -v error -show_entries format=duration -of csv=p=0 video/out/meta-agent-dex-demo.mp4` ≤ 180.
 4. Every narrated number: `python3 -c "import json;t=json.load(open('video/out/take.json'));print(t)"` and compare with the narration in `video/out/audio/../..` (`node --experimental-strip-types video/script.ts --narration`).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add video/build.py
@@ -1584,7 +1584,7 @@ git commit -m "feat(video): ffmpeg assembly with the 3:00 ceiling enforced"
 - Create: `video/speculators.sh`
 - Modify: `video/README.md` (already has the procedure; add the "what to look at" list)
 
-- [ ] **Step 1: Write `video/speculators.sh`**
+- [x] **Step 1: Write `video/speculators.sh`**
 
 ```bash
 #!/usr/bin/env bash
@@ -1607,7 +1607,7 @@ for pid in $(pgrep -f "bots/speculator.ts"); do
 done
 ```
 
-- [ ] **Step 2: The take, in order**
+- [x] **Step 2: The take, in order**
 
 ```bash
 bash video/speculators.sh on
@@ -1624,7 +1624,7 @@ bash video/speculators.sh off
 
 Expected: `select.ts` prints the case; `build.py` ends with `ok: under 3:00`; `speculators.sh off` lists two processes with `AGENT_WIND_DOWN=1`.
 
-- [ ] **Step 3: Verify per spec §10 and record the result in the README**
+- [x] **Step 3: Verify per spec §10 and record the result in the README**
 
 Append to `video/README.md`:
 ```markdown
@@ -1637,7 +1637,7 @@ Append to `video/README.md`:
 - `pgrep -af bots/speculator.ts` — two processes, both back on AGENT_WIND_DOWN=1.
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add video/speculators.sh video/README.md

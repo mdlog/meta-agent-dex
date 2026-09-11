@@ -9,7 +9,10 @@ case "${1:-}" in
   *) echo "usage: bash video/speculators.sh on|off" >&2; exit 64 ;;
 esac
 pkill -f "bots/speculator[.]ts" || true
-sleep 2
+# Shutdown is graceful (open redemptions finish first); wait for it rather than
+# starting a second process on the same key.
+for _ in $(seq 1 30); do pgrep -f "bots/speculator[.]ts" >/dev/null || break; sleep 1; done
+pkill -KILL -f "bots/speculator[.]ts" 2>/dev/null || true
 AGENT_WIND_DOWN=$MODE npm run --silent speculators
 sleep 3
 echo "--- running speculators (want two, AGENT_WIND_DOWN=$MODE):"

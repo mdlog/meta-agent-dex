@@ -96,7 +96,24 @@ async def render(rate: str):
     return index
 
 
+def retime():
+    """Recompute segment lengths from the existing audio after script timing changes."""
+    index = json.loads((OUT / "index.json").read_text())
+    by_id = {b["id"]: b for b in narration()}
+    for row in index:
+        b = by_id[row["id"]]
+        row["delayMs"], row["minVisualMs"] = b["delayMs"], b["minVisualMs"]
+        row["segmentS"] = round(segment_seconds(row["audioS"], b["delayMs"], b["minVisualMs"]), 3)
+        print(f"  {row['id']}: {row['audioS']:6.2f}s speech -> {row['segmentS']:6.2f}s segment")
+    total = sum(r["segmentS"] for r in index)
+    print(f"total {total:.1f}s")
+    (OUT / "index.json").write_text(json.dumps(index, indent=1))
+
+
 def main():
+    if "--timing-only" in sys.argv:
+        retime()
+        return
     rate = "+0%"
     while True:
         print(f"rendering at rate {rate}")

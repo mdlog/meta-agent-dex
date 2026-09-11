@@ -66,9 +66,81 @@ function terminalData(panes: TerminalPane[], intervalMs: number) {
   };
 }
 
+const TERMINAL_HTML = fs.readFileSync(path.join(VIDEO_DIR, "terminal.html"), "utf8");
+const CARDS_HTML = fs.readFileSync(path.join(VIDEO_DIR, "cards.html"), "utf8");
+
+/**
+ * Terminal shots and the end card sit in a full-screen iframe over the page
+ * that is already loaded, so cutting back to the app is a DOM removal rather
+ * than a navigation that has to re-read the chain.
+ */
+async function overlay(page: Page, html: string, render: unknown) {
+  await page.evaluate(
+    async ({ html, render }) => {
+      document.getElementById("__overlay")?.remove();
+      const cursor = document.getElementById("__cursor");
+      if (cursor) cursor.style.display = "none";
+      const f = document.createElement("iframe");
+      f.id = "__overlay";
+      f.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483646;background:#0D1118;";
+      f.srcdoc = html;
+      document.documentElement.appendChild(f);
+      await new Promise((r) => (f.onload = r));
+      await (f.contentWindow as unknown as { render: (o: unknown) => Promise<void> }).render(render);
+    },
+    { html, render },
+  );
+}
+
+async function clearOverlay(page: Page) {
+  await page.evaluate(() => {
+    document.getElementById("__overlay")?.remove();
+    const cursor = document.getElementById("__cursor");
+    if (cursor) cursor.style.display = "";
+  });
+}
+
+/**
+ * The Shannon explorer takes ~12 s to render a transaction in headless Chromium,
+ * far longer than the beat can wait, so the shot is a screenshot of the real
+ * explorer page for the tape's newest transaction, captured off-camera at the
+ * start of the beat and shown as an overlay when the narration reaches it.
+ */
+async function captureExplorer(browser: import("playwright").Browser, take: { base: string; explorer: string; agent: { slug: string } }) {
+  const profile = (await fetch(`${take.base}/api/agents/${take.agent.slug}`, { signal: AbortSignal.timeout(30_000) }).then((r) => r.json())) as { trades: { txHash: string }[] };
+  const tx = profile.trades.find((t) => t.txHash)?.txHash;
+  if (!tx) return null;
+  const url = `${take.explorer}/tx/${tx}`;
+  const ctx = await browser.newContext({ viewport: { width: 1920, height: 1080 }, colorScheme: "dark" });
+  const page = await ctx.newPage();
+  const shot = path.join(OUT_DIR, "explorer.png");
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45_000 });
+    await page.getByText(tx.slice(0, 10)).first().waitFor({ timeout: 40_000 });
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: shot });
+    return { tx, url, shot };
+  } catch (e) {
+    console.warn(`  explorer capture failed (${e instanceof Error ? e.message.split("\n")[0] : e}); holding on the tape instead`);
+    return null;
+  } finally {
+    await ctx.close();
+  }
+}
+
+/** A cold SSR page reads the chain (≈1–3 s); hitting it once first makes the on-camera load fast. */
+async function warm(base: string, paths: string[]) {
+  for (const p of paths) {
+    await fetch(base + p, { signal: AbortSignal.timeout(30_000) }).then((r) => r.arrayBuffer()).catch(() => {});
+  }
+}
+
 /** Wait for the page to settle, then refuse the states the runbook says never to film. */
 async function settled(page: Page) {
-  await page.waitForLoadState("networkidle", { timeout: NAV_TIMEOUT }).catch(() => {});
+  // "load" plus a short settle: these pages poll, so networkidle would wait
+  // its whole timeout on every navigation and push every anchored action late.
+  await page.waitForLoadState("load", { timeout: NAV_TIMEOUT }).catch(() => {});
+  await page.waitForTimeout(800);
   const bad = await page.evaluate(() => {
     const t = document.body.innerText;
     if (t.includes("SIMULATED DATA")) return "SIMULATED DATA";
@@ -100,6 +172,11 @@ async function main() {
     const words = wordsOf(beat.id);
     const delayS = row.delayMs / 1000;
 
+    // Off-camera preparation first: warm the server and capture the explorer
+    // before the recording context exists, so none of it lands in the clip.
+    if (!PROBE) await warm(take.base, beat.actions.flatMap((a) => (a.kind === "goto" ? [a.path] : [])));
+    const explorerShot = !PROBE && beat.actions.some((a) => a.kind === "explorer") ? await captureExplorer(browser, take) : null;
+
     const context: BrowserContext = await browser.newContext({
       viewport: { width: 1920, height: 1080 },
       deviceScaleFactor: 1,
@@ -112,9 +189,22 @@ async function main() {
     const t0 = Date.now();
     const elapsedS = () => (Date.now() - t0) / 1000;
     const routes: RouteMark[] = [];
+    let currentRoute = "";
     const setRoute = (route: string) => routes.push({ atS: Number(elapsedS().toFixed(2)), route });
     const wait = (ms: number) => (PROBE ? Promise.resolve() : page.waitForTimeout(ms));
     const loc = (sel: string) => page.locator(sel).first();
+    // A client-rendered page whose API call failed once shows nothing until its
+    // next poll; a reload is what a person would do, so do it once, on camera.
+    const ready = async (sel: string) => {
+      try {
+        await loc(sel).waitFor({ timeout: 15000 });
+      } catch {
+        console.warn(`  ${sel} not visible after 15s — reloading once`);
+        await page.reload({ waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT });
+        await settled(page);
+        await loc(sel).waitFor({ timeout: 20000 });
+      }
+    };
 
     console.log(`\n▶ ${beat.id} (${PROBE ? "probe" : `hold ${row.segmentS}s`})`);
     for (const a of beat.actions) {
@@ -128,13 +218,18 @@ async function main() {
         switch (a.kind) {
           case "card":
             setRoute("");
-            await page.goto("file://" + path.join(VIDEO_DIR, "cards.html"));
-            await page.evaluate((n) => (window as unknown as { render: (o: { card: string }) => Promise<void> }).render({ card: n }), a.name);
+            if (page.url() === "about:blank") {
+              await page.goto("file://" + path.join(VIDEO_DIR, "cards.html"));
+              await page.evaluate((n) => (window as unknown as { render: (o: { card: string }) => Promise<void> }).render({ card: n }), a.name);
+            } else {
+              await overlay(page, CARDS_HTML, { card: a.name });
+            }
             await wait(a.ms);
             break;
           case "goto":
             await page.goto(take.base + a.path, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT });
             await settled(page);
+            currentRoute = a.route;
             setRoute(a.route);
             await page.mouse.move(960, 540);
             break;
@@ -142,48 +237,57 @@ async function main() {
             await wait(a.ms);
             break;
           case "hover":
-            await loc(a.selector).waitFor({ timeout: 15000 });
+            await ready(a.selector);
             await loc(a.selector).scrollIntoViewIfNeeded();
             await loc(a.selector).hover({ steps: PROBE ? 1 : 25 });
             await wait(a.ms ?? 1500);
             break;
           case "click":
-            await loc(a.selector).waitFor({ timeout: 15000 });
+            await ready(a.selector);
             await loc(a.selector).hover({ steps: PROBE ? 1 : 20 });
             await wait(400);
             await loc(a.selector).click();
             await settled(page);
+            currentRoute = a.route;
             setRoute(a.route);
             await wait(1200);
             break;
           case "scrollTo":
-            await loc(a.selector).waitFor({ timeout: 15000 });
+            await ready(a.selector);
             await loc(a.selector).evaluate((el) => el.scrollIntoView({ behavior: "smooth", block: "center" }));
             await wait(a.ms ?? 1500);
             break;
           case "explorer": {
-            const href = await loc(a.selector).getAttribute("href");
-            if (!href) throw new Error(`no href on ${a.selector}`);
-            await loc(a.selector).scrollIntoViewIfNeeded();
-            await loc(a.selector).hover({ steps: PROBE ? 1 : 20 });
-            await wait(600);
-            if (!PROBE) {
-              const ok = await page.goto(href, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT }).then(() => true).catch(() => false);
-              if (ok) {
-                const u = new URL(href);
-                setRoute(u.host + u.pathname.replace(/(0x[0-9a-f]{8})[0-9a-f]+/i, "$1…"));
-              } else {
-                console.warn("  explorer did not load in time; holding on the tape instead");
-              }
+            const link = explorerShot ? page.locator(`table a[href*="${explorerShot.tx}"]`).first() : loc(a.selector);
+            const target = (await link.count()) > 0 ? link : loc(a.selector);
+            await ready(a.selector);
+            await target.scrollIntoViewIfNeeded();
+            await target.hover({ steps: PROBE ? 1 : 20 });
+            await wait(700);
+            if (explorerShot) {
+              const png = fs.readFileSync(explorerShot.shot).toString("base64");
+              await page.evaluate((src) => {
+                document.getElementById("__overlay")?.remove();
+                const cursor = document.getElementById("__cursor");
+                if (cursor) cursor.style.display = "none";
+                const img = document.createElement("img");
+                img.id = "__overlay";
+                img.src = src;
+                img.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;z-index:2147483646;object-fit:cover;";
+                document.documentElement.appendChild(img);
+              }, `data:image/png;base64,${png}`);
+              const u = new URL(explorerShot.url);
+              setRoute(u.host + u.pathname.replace(/(0x[0-9a-f]{8})[0-9a-f]+/i, "$1…"));
             }
             await wait(a.ms);
             break;
           }
           case "terminal":
             setRoute("");
-            await page.goto("file://" + path.join(VIDEO_DIR, "terminal.html"));
-            await page.evaluate((d) => (window as unknown as { render: (o: unknown) => Promise<void> }).render(d), terminalData(a.panes, PROBE ? 0 : 350));
+            await overlay(page, TERMINAL_HTML, terminalData(a.panes, PROBE ? 0 : 350));
             await wait(a.ms);
+            await clearOverlay(page);
+            setRoute(currentRoute);
             break;
         }
       } catch (e) {

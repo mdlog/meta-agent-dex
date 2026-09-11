@@ -1,6 +1,6 @@
 # Demo video — design
 
-Date: 2026-09-11. Status: draft, awaiting review.
+Date: 2026-09-11. Status: implemented — first take rendered the same day (see `video/README.md`).
 
 The DoraHacks submission requires a 2–3 minute demo video, and `docs/SUBMISSION.md`
 and `README.md` still carry `TODO — video URL`. `docs/DEMO_RUNBOOK.md` is a
