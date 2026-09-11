@@ -266,7 +266,7 @@ export function OverviewBoard({
                         non-live figure is also muted. */}
                     <span className="flex flex-col items-start gap-1">
                       <strong className={nav.live ? "" : "text-fg-muted"}>{nav.figure}</strong>
-                      <span className="text-[9px] text-fg-subtle">{nav.note}</span>
+                      <span className="text-[11px] text-fg-subtle">{nav.note}</span>
                     </span>
                   </td>
 

@@ -173,7 +173,7 @@ export function OverviewMarkets({ rows }: { rows: MetaMarketRow[] }) {
                looking at, rather than reading ours as the contract's. */
             <div className="mt-5 mb-7">
               <h3 className="my-0 text-fg-subtle">Question not read</h3>
-              <p className="mt-2 max-w-[46ch] text-[10px] leading-relaxed text-fg-subtle">
+              <p className="mt-2 max-w-[46ch] text-xs leading-relaxed text-fg-subtle">
                 {feature.question.reason}. Only the contract states what it settles on; open it
                 below to read the question from the market itself.
               </p>
@@ -205,7 +205,7 @@ export function OverviewMarkets({ rows }: { rows: MetaMarketRow[] }) {
           </div>
 
           {yesBasis !== "mid" && (
-            <p className="mb-4 max-w-[62ch] text-[10px] leading-relaxed text-fg-subtle">
+            <p className="mb-4 max-w-[62ch] text-xs leading-relaxed text-fg-subtle">
               {basisSentence(yesBasis)}
             </p>
           )}
@@ -240,7 +240,7 @@ export function OverviewMarkets({ rows }: { rows: MetaMarketRow[] }) {
             )}
           </div>
 
-          <p className="mb-5 max-w-[62ch] text-[10px] leading-relaxed text-fg-subtle">
+          <p className="mb-5 max-w-[62ch] text-xs leading-relaxed text-fg-subtle">
             {feature.vault === null
               ? "No live cash figure right now — the vault did not answer this read. The figure at open is the level this contract settles against."
               : "Cash, not NAV — positions convert back to cash when redeemAll() runs at close, and settlement compares cash at close to cash at open. touched() is the vault's redeem list rather than a per-session tally: opening a session keeps any market still holding a position from an earlier one, so the count can include carryover."}

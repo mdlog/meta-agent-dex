@@ -409,13 +409,13 @@ export function AgentProfile({ slug }: { slug: string }) {
               </div>
             ))}
             {params.length === 0 && (
-              <p className="mt-3 text-[10px] text-fg-subtle">No parameters declared.</p>
+              <p className="mt-3 text-xs text-fg-subtle">No parameters declared.</p>
             )}
           </dl>
 
           <div className="mt-5 border-t border-line pt-4">
             <span className="metric-label">Config hash</span>
-            <p className="mt-2 break-all font-mono text-[10px] leading-relaxed text-fg-subtle">
+            <p className="mt-2 break-all font-mono text-xs leading-relaxed text-fg-subtle">
               {agent.configHash}
             </p>
           </div>
@@ -611,7 +611,7 @@ export function AgentProfile({ slug }: { slug: string }) {
                 ))}
               </ul>
               {closed.length > HISTORY_LIMIT && (
-                <p className="mt-3 font-mono text-[10px] text-fg-subtle">
+                <p className="mt-3 font-mono text-xs text-fg-subtle">
                   Showing the {HISTORY_LIMIT} most recent of {closed.length} closed sessions.
                 </p>
               )}

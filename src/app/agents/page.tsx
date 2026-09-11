@@ -110,7 +110,7 @@ export default function AgentsPage() {
                 <span>One per session · frozen at close, and never restated</span>
               </div>
             </div>
-            <p className="mb-4 max-w-[46ch] text-[10px] leading-relaxed text-fg-muted">
+            <p className="mb-4 max-w-[46ch] text-xs leading-relaxed text-fg-muted">
               A session resolves at the market&apos;s resolutionTime, when DreamDEX&apos;s validator
               subcommittee reads our oracle. Three calls in the path are permissionless and anyone
               can make them: <span className="mono">closeSession()</span>,{" "}

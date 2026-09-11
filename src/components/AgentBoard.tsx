@@ -533,7 +533,7 @@ export function AgentBoard() {
                             scanned down the column as though it were current. */}
                         <span className="flex flex-col items-start gap-1">
                           <strong className={nav.live ? "" : "text-fg-muted"}>{nav.figure}</strong>
-                          <span className="text-[9px] text-fg-subtle">{nav.note}</span>
+                          <span className="text-[11px] text-fg-subtle">{nav.note}</span>
                         </span>
                       </td>
 
@@ -568,7 +568,7 @@ export function AgentBoard() {
                         {isLive(s) ? (
                           <span className="flex flex-col items-start gap-1.5">
                             <AgentStatusPill status={s.status} />
-                            <span className="num font-mono text-[9px] text-fg-subtle">
+                            <span className="num font-mono text-[11px] text-fg-subtle">
                               <Countdown to={s.closesAt / 1000} />
                             </span>
                           </span>

@@ -179,7 +179,7 @@ export function AgentTradeTape({
       </div>
 
       {unmeasured > 0 && (
-        <p className="mt-3 text-[10px] leading-relaxed text-fg-subtle">
+        <p className="mt-3 text-xs leading-relaxed text-fg-subtle">
           {unmeasured === 1 ? "One order carries" : `${unmeasured} orders carry`} a dash instead of a
           cash delta: the vault&rsquo;s <span className="mono">Traded</span> event was not in that
           transaction&rsquo;s receipt, so nothing measured what the order cost. The transaction is

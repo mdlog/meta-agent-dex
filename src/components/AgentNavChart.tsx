@@ -188,7 +188,7 @@ export function AgentNavChart({
           >
             {usdc(last.raw)} tUSDC
           </p>
-          <p className="num mt-1 font-mono text-[9px] text-fg-subtle">last sample · {tick(last.at)}</p>
+          <p className="num mt-1 font-mono text-[11px] text-fg-subtle">last sample · {tick(last.at)}</p>
         </div>
       </div>
 
@@ -295,7 +295,7 @@ export function AgentNavChart({
           says so outright rather than printing one number twice and leaving a
           reader to wonder what they missed. The distance between them is in
           the sentence above and is not repeated here. */}
-      <p className="num mt-2 font-mono text-[10px] text-fg-subtle">
+      <p className="num mt-2 font-mono text-xs text-fg-subtle">
         {base !== null && deltaRaw === "0" ? (
           <>baseline and last sample are the same read · {usdc(baseline)} tUSDC</>
         ) : (
