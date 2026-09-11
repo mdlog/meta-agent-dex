@@ -118,7 +118,7 @@ export async function MarketObserverPanel({ market }: { market: ArenaMarket }) {
             )}
           </p>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] text-fg-subtle">
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-fg-subtle">
             <ExternalLink href={addressUrl(agent.vaultAddress)} className="hover:text-fg-muted">
               vault {shortHex(agent.vaultAddress)}
             </ExternalLink>

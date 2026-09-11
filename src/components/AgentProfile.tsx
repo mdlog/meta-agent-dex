@@ -236,7 +236,7 @@ export function AgentProfile({ slug }: { slug: string }) {
         </div>
       </header>
 
-      <div className="-mt-4 mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] text-fg-subtle">
+      <div className="-mt-4 mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-fg-subtle">
         <span className="strategy-chip">{agent.strategy}</span>
         <ExternalLink href={addressUrl(agent.vaultAddress)} className="hover:text-fg-muted">
           vault {shortHex(agent.vaultAddress)}
@@ -278,9 +278,9 @@ export function AgentProfile({ slug }: { slug: string }) {
               }`}
             >
               {usdc(headlineNav)}
-              <span className="ml-2 font-mono text-[11px] tracking-normal text-fg-subtle">tUSDC</span>
+              <span className="ml-2 font-mono text-xs tracking-normal text-fg-subtle">tUSDC</span>
             </p>
-            <p className="mt-3 max-w-[44ch] text-[11px] leading-relaxed text-fg-muted">
+            <p className="mt-3 max-w-[44ch] text-xs leading-relaxed text-fg-muted">
               {!measuredNow
                 ? "The vault did not answer this request, so this is the most recent stored sample rather than a reading of the vault as it stands. Samples are written when an agent registers and when a session closes — not while one runs."
                 : live
@@ -290,7 +290,7 @@ export function AgentProfile({ slug }: { slug: string }) {
             {/* At 11px, not 9px. This line is what tells a reader whether the
                 number above it was measured a moment ago or an hour ago, which
                 makes it part of the figure rather than a footnote to it. */}
-            <p className="mt-2 font-mono text-[11px] text-fg-subtle">
+            <p className="mt-2 font-mono text-xs text-fg-subtle">
               {liveVault
                 ? `read from the vault on this request · touched() holds ${liveVault.touchedCount} ${
                     liveVault.touchedCount === 1 ? "market" : "markets"
@@ -307,7 +307,7 @@ export function AgentProfile({ slug }: { slug: string }) {
                 than merely old: the agent is trading right now, so whatever the
                 sample says predates every order it has placed since. */}
             {!measuredNow && live !== null && latestPoint !== null && (
-              <p className="mt-2 max-w-[44ch] text-[11px] leading-relaxed text-warn">
+              <p className="mt-2 max-w-[44ch] text-xs leading-relaxed text-warn">
                 A session is open, so this sample is older than the trading it is being read against.
               </p>
             )}
@@ -317,9 +317,9 @@ export function AgentProfile({ slug }: { slug: string }) {
             <span className="metric-label">Unaccounted · unaccounted()</span>
             <p className="num mt-3 font-display text-[40px] leading-none tracking-[-0.05em] text-fg-subtle">
               {usdc(unaccounted)}
-              <span className="ml-2 font-mono text-[11px] tracking-normal">tUSDC</span>
+              <span className="ml-2 font-mono text-xs tracking-normal">tUSDC</span>
             </p>
-            <p className="mt-3 max-w-[44ch] text-[11px] leading-relaxed text-fg-muted">
+            <p className="mt-3 max-w-[44ch] text-xs leading-relaxed text-fg-muted">
               Tokens sitting in the vault that no DreamDEX call delivered. Visible to anyone,
               counted by nothing — it can never reach NAV.
             </p>
@@ -388,7 +388,7 @@ export function AgentProfile({ slug }: { slug: string }) {
           <h2 className="mt-3 font-display text-[19px] tracking-[-0.04em]">
             Hashed before anyone bet
           </h2>
-          <p className="mt-3 text-[11px] leading-relaxed text-fg-muted">
+          <p className="mt-3 text-xs leading-relaxed text-fg-muted">
             Hashed at registration and written into the meta-market&apos;s on-chain context, so it
             cannot be edited after anyone takes a position.
           </p>
@@ -431,7 +431,7 @@ export function AgentProfile({ slug }: { slug: string }) {
             <span className="eyebrow-line" aria-hidden /> CUSTODY
           </div>
           <h2 className="mt-3 font-display text-[19px] tracking-[-0.04em]">The vault holds it</h2>
-          <p className="mt-3 text-[11px] leading-relaxed text-fg-muted">
+          <p className="mt-3 text-xs leading-relaxed text-fg-muted">
             The operator key may only call <span className="mono">trade()</span> — never deposit or
             withdraw. The owner moves funds only between sessions.
           </p>
@@ -471,7 +471,7 @@ export function AgentProfile({ slug }: { slug: string }) {
                 <dt>NAV last sampled</dt>
                 <dd>
                   <strong className="num">{clockTime(latestPoint.at)}</strong>
-                  <span className="ml-2 font-mono text-[10px] text-fg-subtle">
+                  <span className="ml-2 font-mono text-xs text-fg-subtle">
                     {ageLabel(latestPoint.at, now)}
                   </span>
                 </dd>

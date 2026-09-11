@@ -188,7 +188,7 @@ export function AgentNavChart({
           >
             {usdc(last.raw)} tUSDC
           </p>
-          <p className="num mt-1 font-mono text-[11px] text-fg-subtle">last sample · {tick(last.at)}</p>
+          <p className="num mt-1 font-mono text-xs text-fg-subtle">last sample · {tick(last.at)}</p>
         </div>
       </div>
 
@@ -272,7 +272,7 @@ export function AgentNavChart({
           session close — so on a live session the sentence was reporting a
           position the agent had held some time ago as its position at this
           moment. The distance is real; the tense was not. */}
-      <p className="mt-4 text-[11px] leading-relaxed text-fg-muted">
+      <p className="mt-4 text-xs leading-relaxed text-fg-muted">
         {caption ??
           (base === null
             ? "Each point is one read of the vault's own nav(). The line moves only when a DreamDEX call settles collateral into or out of the vault."

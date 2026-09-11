@@ -227,7 +227,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
 
 /* Numbers align in columns; identifiers and hashes read as code. */
 .num { font-variant-numeric: tabular-nums; }
-.mono { font-family: var(--font-mono); font-size: 0.92em; letter-spacing: -0.01em; }
+.mono { font-family: var(--font-mono); font-size: 0.95em; letter-spacing: -0.01em; }
 
 /* The 8% reduction optically matches mono to adjacent sans at the same size.
    Inside Signal Room's own rules the size was already chosen for mono, and
@@ -364,7 +364,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     padding: 0 0.5rem;
     border: 1px solid transparent;
     border-radius: 9999px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
@@ -431,7 +431,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .table th {
     padding: 0.625rem 0.875rem;
     text-align: left;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -657,7 +657,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     border-left: 1px solid var(--color-accent);
     background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent);
   }
-  .rail-note p { margin: 9px 0 11px; color: var(--color-fg-muted); font-size: 10px; line-height: 1.5; }
+  .rail-note p { margin: 9px 0 11px; color: var(--color-fg-muted); font-size: 12px; line-height: 1.5; }
   .note-kicker {
     display: flex;
     align-items: center;
@@ -677,10 +677,10 @@ p, dd, li, figcaption { text-wrap: pretty; }
     padding: 0 clamp(20px, 4vw, 54px);
     border-bottom: 1px solid var(--color-line);
   }
-  .breadcrumb { display: flex; align-items: center; gap: 11px; color: var(--color-fg-subtle); font-size: 11px; }
+  .breadcrumb { display: flex; align-items: center; gap: 11px; color: var(--color-fg-subtle); font-size: 12px; }
   .breadcrumb strong { color: var(--color-fg); font-weight: 600; }
   .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 18px; }
-  .live-ticker { display: flex; align-items: center; gap: 8px; color: var(--color-fg-subtle); font-size: 10px; }
+  .live-ticker { display: flex; align-items: center; gap: 8px; color: var(--color-fg-subtle); font-size: 12px; }
   .live-ticker .mono { margin-left: 2px; }
   /* The base node. signal-room.css recolours it for degraded and stale; the
      pill rules further down resize it, and both need something to override. */
@@ -705,7 +705,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     border-radius: 5px;
     background: var(--color-accent);
     color: var(--color-accent-ink);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     transition: transform 160ms ease, background var(--dur) ease, box-shadow var(--dur) ease;
   }
@@ -727,7 +727,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     padding-top: 22px;
     border-top: 1px solid var(--color-line);
     color: var(--color-fg-subtle);
-    font-size: 10px;
+    font-size: 12px;
   }
   .footer-right { display: flex; gap: 20px; }
   .footer-right > span:first-child { display: flex; align-items: center; gap: 7px; }
@@ -754,7 +754,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     padding: 0;
     color: var(--color-accent-fg);
     background: transparent;
-    font-size: 10px;
+    font-size: 12px;
     transition: color var(--dur) ease;
   }
   .text-button:hover, .view-link:hover { color: var(--color-accent); }
@@ -783,7 +783,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     font: 600 9px var(--font-mono);
   }
   .profile-copy { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-  .profile-copy strong { color: var(--color-fg); font-size: 11px; font-weight: 600; }
+  .profile-copy strong { color: var(--color-fg); font-size: 12px; font-weight: 600; }
   .profile-copy span { color: var(--color-fg-subtle); font: 9px var(--font-mono); }
 
   /* Topbar pieces signal-room.css leaves to us ---------------------------- */
@@ -801,7 +801,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     background: var(--color-accent);
     color: var(--color-accent-ink);
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     transition: transform 160ms ease, background var(--dur) ease, box-shadow var(--dur) ease;
   }
@@ -868,7 +868,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .hero-copy h1 em { color: var(--color-accent); font-style: normal; }
   .hero-copy p { max-width: 430px; color: var(--color-fg-muted); font-size: 13px; line-height: 1.62; margin: 0; }
   .hero-actions { display: flex; align-items: center; gap: 23px; margin-top: 26px; }
-  .hero-actions .text-button { color: var(--color-fg-muted); font-size: 11px; }
+  .hero-actions .text-button { color: var(--color-fg-muted); font-size: 12px; }
   .hero-actions .text-button:hover { color: var(--color-accent); }
 
   .hero-meta {
@@ -956,8 +956,8 @@ p, dd, li, figcaption { text-wrap: pretty; }
     letter-spacing: -0.045em;
     margin: 12px 0 0;
   }
-  .section-description { color: var(--color-fg-subtle); font-size: 11px; margin: 7px 0 0; }
-  .view-link { font-size: 11px; margin-bottom: 3px; }
+  .section-description { color: var(--color-fg-subtle); font-size: 12px; margin: 7px 0 0; }
+  .view-link { font-size: 12px; margin-bottom: 3px; }
 
   /* Market panels --------------------------------------------------------- */
   .market-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr); gap: 15px; }
@@ -1050,7 +1050,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     color: var(--color-fg-muted);
     font: 11px var(--font-mono);
   }
-  .muted-label { color: var(--color-fg-subtle); font-size: 9px; margin-right: 4px; }
+  .muted-label { color: var(--color-fg-subtle); font-size: 12px; margin-right: 4px; }
 
   .secondary-button {
     display: inline-flex;
@@ -1062,7 +1062,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     background: transparent;
     color: var(--color-fg-muted);
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 12px;
     transition: border-color var(--dur) ease, background var(--dur) ease, color var(--dur) ease, transform 160ms ease;
   }
   .secondary-button:hover {
@@ -1095,7 +1095,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
 
   .market-row-copy { min-width: 0; flex: 1; }
   .market-row-copy strong { display: block; font: 600 11px var(--font-display); }
-  .market-row-copy > span { display: block; color: var(--color-fg-muted); font-size: 11px; line-height: 1.35; margin-top: 6px; }
+  .market-row-copy > span { display: block; color: var(--color-fg-muted); font-size: 12px; line-height: 1.35; margin-top: 6px; }
   .market-row-meta {
     justify-content: flex-start;
     gap: 7px;
@@ -1124,7 +1124,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     color: var(--color-fg-subtle);
     background: transparent;
     border: 1px dashed var(--color-line);
-    font-size: 10px;
+    font-size: 12px;
     transition: color var(--dur) ease, border-color var(--dur) ease;
   }
   .market-add:hover { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 40%, transparent); }
@@ -1142,7 +1142,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     color: var(--color-fg-subtle);
     border-bottom: 1px solid var(--color-line);
   }
-  .search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--color-fg); font-size: 11px; }
+  .search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--color-fg); font-size: 12px; }
   .search-box input::placeholder { color: var(--color-fg-subtle); }
   .toolbar-actions { display: flex; gap: 7px; }
   .filter-button, .toolbar-actions select {
@@ -1154,7 +1154,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     color: var(--color-fg-muted);
     border: 1px solid var(--color-line);
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .toolbar-actions select { appearance: none; min-width: 108px; }
   .filter-button.active { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
@@ -1165,9 +1165,9 @@ p, dd, li, figcaption { text-wrap: pretty; }
     margin-bottom: 8px;
     background: color-mix(in srgb, var(--color-accent) 6%, transparent);
     color: var(--color-fg-muted);
-    font-size: 10px;
+    font-size: 12px;
   }
-  .filter-drawer button { display: flex; align-items: center; gap: 4px; color: var(--color-accent); background: transparent; font-size: 10px; }
+  .filter-drawer button { display: flex; align-items: center; gap: 4px; color: var(--color-accent); background: transparent; font-size: 12px; }
 
   .agent-table-wrap { overflow-x: auto; border-top: 1px solid var(--color-line); }
   .agent-table { width: 100%; border-collapse: collapse; min-width: 930px; }
@@ -1185,7 +1185,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     vertical-align: middle;
     color: var(--color-fg);
     border-top: 1px solid var(--color-line-soft);
-    font-size: 11px;
+    font-size: 12px;
   }
   .agent-table tbody tr { transition: background var(--dur) ease; }
   .agent-table tbody tr:hover { background: rgb(255 255 255 / 0.025); }
@@ -1214,8 +1214,8 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .agent-avatar.violet { color: var(--color-violet); background: color-mix(in srgb, var(--color-violet) 10%, transparent); }
   .agent-avatar.amber  { color: var(--color-amber);  background: color-mix(in srgb, var(--color-amber) 10%, transparent); }
 
-  .address { display: flex; align-items: center; gap: 5px; margin-top: 4px; color: var(--color-fg-subtle); font-family: var(--font-mono); font-size: 9px; }
-  .strategy-chip { color: var(--color-fg-muted); background: var(--color-card-2); padding: 5px 7px; font-size: 9px; white-space: nowrap; }
+  .address { display: flex; align-items: center; gap: 5px; margin-top: 4px; color: var(--color-fg-subtle); font-family: var(--font-mono); font-size: 12px; }
+  .strategy-chip { color: var(--color-fg-muted); background: var(--color-card-2); padding: 5px 7px; font-size: 12px; white-space: nowrap; }
 
   .performance-cell { display: flex; align-items: center; gap: 12px; min-width: 175px; }
   .performance-cell strong { font: 600 12px var(--font-mono); font-variant-numeric: tabular-nums; }
@@ -1293,7 +1293,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   }
   .point-index { color: var(--color-accent); font: 10px var(--font-mono); }
   .insight-points strong { color: var(--color-fg); font: 600 11px var(--font-display); }
-  .insight-points span:last-child { color: var(--color-fg-subtle); font-size: 10px; line-height: 1.35; }
+  .insight-points span:last-child { color: var(--color-fg-subtle); font-size: 12px; line-height: 1.35; }
 
   /* Was an illustration; now a generated field with a bottom scrim. */
   .settlement-card {
@@ -1332,7 +1332,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .settlement-status { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
   .settlement-status div { display: flex; flex-direction: column; gap: 3px; }
   .settlement-status strong { color: var(--color-fg); font: 11px var(--font-mono); }
-  .settlement-status span:last-child { color: var(--color-fg-subtle); font-size: 10px; }
+  .settlement-status span:last-child { color: var(--color-fg-subtle); font-size: 12px; }
 
   /* .page-footer and .footer-right are signal-room.css's; these two are not. */
   .footer-dot { color: var(--color-accent); margin: 0 4px; }
@@ -1509,8 +1509,8 @@ p, dd, li, figcaption { text-wrap: pretty; }
   }
   .subpage-callout > div:nth-child(2) { flex: 1; }
   .subpage-callout strong { color: var(--color-fg); font: 600 12px var(--font-display); }
-  .subpage-callout p { color: var(--color-fg-muted); font-size: 10px; margin: 5px 0 0; }
-  .subpage-callout .primary-button { padding: 10px 13px; font-size: 10px; }
+  .subpage-callout p { color: var(--color-fg-muted); font-size: 12px; margin: 5px 0 0; }
+  .subpage-callout .primary-button { padding: 10px 13px; font-size: 12px; }
 
   /* Creator hero + orbit -------------------------------------------------- */
   .creator-hero {
@@ -1578,7 +1578,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .creator-agent-main .address { display: inline-flex; }
   .creator-agent-metrics { display: flex; flex-direction: column; gap: 5px; min-width: 125px; }
   .creator-agent-metrics strong { color: var(--color-fg); font: 500 17px var(--font-display); font-variant-numeric: tabular-nums; }
-  .creator-agent-metrics .mono { font-size: 9px; }
+  .creator-agent-metrics .mono { font-size: 12px; }
 
   /* Settlement engine ----------------------------------------------------- */
   .settlement-status-banner {
@@ -1602,7 +1602,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   }
   .settlement-status-banner > div:nth-child(2) { flex: 1; display: flex; flex-direction: column; gap: 4px; }
   .settlement-status-banner strong { color: var(--color-fg); font: 600 12px var(--font-display); }
-  .settlement-status-banner span:not(.status-dot):not(.status-pill) { color: var(--color-fg-muted); font-size: 10px; }
+  .settlement-status-banner span:not(.status-dot):not(.status-pill) { color: var(--color-fg-muted); font-size: 12px; }
 
   .protocol-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 14px; }
   .queue-list { display: grid; gap: 6px; }
@@ -1619,7 +1619,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   }
   .queue-copy { flex: 1; min-width: 0; }
   .queue-copy strong { display: block; color: var(--color-fg); font: 600 11px var(--font-display); }
-  .queue-copy > span { display: block; color: var(--color-fg-muted); font-size: 10px; margin: 4px 0 10px; }
+  .queue-copy > span { display: block; color: var(--color-fg-muted); font-size: 12px; margin: 4px 0 10px; }
   .queue-copy small { color: var(--color-fg-subtle); font: 9px var(--font-mono); }
   .queue-progress { height: 3px; background: var(--color-card-3); margin-bottom: 7px; }
   .queue-progress span { display: block; height: 100%; background: var(--color-cyan); }
@@ -1629,7 +1629,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .mechanic-step { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid var(--color-line); }
   .mechanic-step > span { color: var(--color-accent); font: 10px var(--font-mono); }
   .mechanic-step strong { color: var(--color-fg); font: 600 11px var(--font-display); }
-  .mechanic-step p { color: var(--color-fg-muted); font-size: 10px; line-height: 1.4; margin: 4px 0 0; }
+  .mechanic-step p { color: var(--color-fg-muted); font-size: 12px; line-height: 1.4; margin: 4px 0 0; }
 
   /* Audit ledger ---------------------------------------------------------- */
   .ledger-overview {
@@ -1651,7 +1651,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .ledger-trust { display: flex; align-items: center; gap: 11px; color: var(--color-accent); flex: 1; }
   .ledger-trust div { display: flex; flex-direction: column; gap: 4px; }
   .ledger-trust strong { color: var(--color-fg); font: 600 11px var(--font-display); }
-  .ledger-trust span { color: var(--color-fg-muted); font-size: 10px; }
+  .ledger-trust span { color: var(--color-fg-muted); font-size: 12px; }
   .ledger-card { padding: 22px 23px 8px; }
   .live-chip { display: flex; align-items: center; gap: 6px; color: var(--color-accent); font: 9px var(--font-mono); }
   .ledger-row {
@@ -1662,7 +1662,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     min-height: 53px;
     border-top: 1px solid var(--color-line);
     color: var(--color-fg-muted);
-    font-size: 10px;
+    font-size: 12px;
   }
   .ledger-head {
     min-height: 36px;
@@ -1694,7 +1694,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
     min-height: 48px;
     border-top: 1px solid var(--color-line);
     color: var(--color-fg-subtle);
-    font-size: 10px;
+    font-size: 12px;
   }
   .setting-field strong { color: var(--color-fg); display: flex; align-items: center; gap: 7px; font: 10px var(--font-mono); }
   .setting-field .network-dot { background: var(--color-cyan); box-shadow: none; }
@@ -1709,7 +1709,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   }
   .toggle-row div { display: flex; flex-direction: column; gap: 4px; }
   .toggle-row strong { color: var(--color-fg); font: 600 11px var(--font-display); }
-  .toggle-row span { color: var(--color-fg-muted); font-size: 10px; }
+  .toggle-row span { color: var(--color-fg-muted); font-size: 12px; }
   .toggle { width: 33px; height: 18px; flex: none; padding: 2px; background: var(--color-card-3); border-radius: 20px; transition: background var(--dur) ease; }
   .toggle span { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--color-fg-subtle); transition: transform var(--dur) ease, background var(--dur) ease; }
   .toggle.on { background: color-mix(in srgb, var(--color-accent) 36%, transparent); }
@@ -1731,7 +1731,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   }
   .appearance-option.selected { border-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
   .appearance-option strong { font: 600 11px var(--font-display); }
-  .appearance-option small { color: var(--color-fg-subtle); font-size: 9px; }
+  .appearance-option small { color: var(--color-fg-subtle); font-size: 12px; }
   .appearance-option svg { grid-column: 3; grid-row: 1 / -1; color: var(--color-accent); }
   .appearance-swatch { grid-row: 1 / -1; width: 42px; height: 42px; border-radius: 4px; }
   .dark-swatch { background: linear-gradient(135deg, var(--color-canvas) 35%, var(--color-accent)); }
@@ -1803,7 +1803,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   .market-layout { grid-template-columns: 1fr; }
   .market-feature-body { padding: 22px; }
   .market-footer { align-items: end; gap: 12px; }
-  .market-footer .secondary-button { font-size: 9px; }
+  .market-footer .secondary-button { font-size: 12px; }
 
   .table-toolbar { align-items: stretch; flex-direction: column; gap: 12px; }
   .search-box { width: 100%; }
@@ -1927,7 +1927,7 @@ p, dd, li, figcaption { text-wrap: pretty; }
   align-items: center;
   gap: 0.5rem;
   min-width: 0;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--color-fg-subtle);
   white-space: nowrap;

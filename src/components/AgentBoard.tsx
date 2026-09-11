@@ -533,7 +533,7 @@ export function AgentBoard() {
                             scanned down the column as though it were current. */}
                         <span className="flex flex-col items-start gap-1">
                           <strong className={nav.live ? "" : "text-fg-muted"}>{nav.figure}</strong>
-                          <span className="text-[11px] text-fg-subtle">{nav.note}</span>
+                          <span className="text-xs text-fg-subtle">{nav.note}</span>
                         </span>
                       </td>
 
@@ -568,7 +568,7 @@ export function AgentBoard() {
                         {isLive(s) ? (
                           <span className="flex flex-col items-start gap-1.5">
                             <AgentStatusPill status={s.status} />
-                            <span className="num font-mono text-[11px] text-fg-subtle">
+                            <span className="num font-mono text-xs text-fg-subtle">
                               <Countdown to={s.closesAt / 1000} />
                             </span>
                           </span>
@@ -607,7 +607,7 @@ export function AgentBoard() {
           </div>
         </div>
 
-        <p className="mt-4 max-w-[86ch] text-[11px] leading-relaxed text-fg-subtle">
+        <p className="mt-4 max-w-[86ch] text-xs leading-relaxed text-fg-subtle">
           <span className="mono">nav()</span> is the vault&apos;s own figure — collateral an
           allowlisted DreamDEX call delivered — and never a token balance, because the Shannon faucet
           is open to anyone. The column reads it from each vault as this board refreshes; while a

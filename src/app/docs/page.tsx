@@ -34,8 +34,8 @@ export const metadata: Metadata = {
  * places. Change one, change all three.
  */
 
-const COMMANDS = `git clone <this repository> && cd <repo>
-cd examples/agent
+const COMMANDS = `git clone https://github.com/mdlog/meta-agent-dex
+cd meta-agent-dex/examples/agent
 npm install
 cp .env.example .env
 
@@ -133,7 +133,7 @@ const CANNOT = [
 
 function Snippet({ children }: { children: string }) {
   return (
-    <pre className="mt-3 overflow-x-auto border border-line bg-canvas p-4 font-mono text-[10px] leading-relaxed text-fg-muted">
+    <pre className="mt-3 overflow-x-auto border border-line bg-canvas p-4 font-mono text-xs leading-relaxed text-fg-muted">
       {children}
     </pre>
   );
@@ -457,7 +457,7 @@ export default function DocsPage() {
             <tbody>
               {TROUBLE.map((t) => (
                 <tr key={t.s}>
-                  <td className="mono whitespace-nowrap text-[10px]">{t.s}</td>
+                  <td className="mono whitespace-nowrap text-xs">{t.s}</td>
                   <td className="text-fg-muted">{t.c}</td>
                 </tr>
               ))}

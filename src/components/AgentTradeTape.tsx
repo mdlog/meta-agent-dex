@@ -167,7 +167,7 @@ export function AgentTradeTape({
                     {r.pnl === null ? "—" : signedPrecise(r.pnl.toString())}
                   </td>
                   <td>
-                    <ExternalLink href={txUrl(t.txHash)} className="font-mono text-[10px] text-fg-subtle hover:text-fg-muted">
+                    <ExternalLink href={txUrl(t.txHash)} className="font-mono text-xs text-fg-subtle hover:text-fg-muted">
                       {shortHex(t.txHash, 6, 4)}
                     </ExternalLink>
                   </td>

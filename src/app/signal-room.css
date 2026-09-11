@@ -77,7 +77,7 @@ a.profile-row:hover .profile-copy strong {
    layered size below it wherever this row carries hex. */
 .profile-copy strong {
   overflow: hidden;
-  font-size: 11px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -140,7 +140,7 @@ a.profile-row:hover .profile-copy strong {
   border: 1px solid var(--color-line);
   background: var(--color-card-2);
   color: var(--color-fg-muted);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-decoration: none;
 }
@@ -195,14 +195,14 @@ a.profile-row:hover .profile-copy strong {
 
 .page-footer .footer-sub {
   margin-top: 6px;
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.8;
 }
 
 .footer-right {
   flex-wrap: wrap;
   align-items: center;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .footer-right a {
@@ -263,7 +263,7 @@ a.profile-row:hover .profile-copy strong {
   .connect-button.is-ghost,
   .connect-button.is-danger {
     padding: 9px 10px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .shell-alert {

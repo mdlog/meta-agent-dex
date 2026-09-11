@@ -92,7 +92,7 @@ export function AgentSessionCard({
 
         <div className="flex shrink-0 flex-col items-end gap-2">
           <AgentStatusPill status={session.status} />
-          <span className="flex items-center gap-1.5 font-mono text-[10px] text-fg-subtle">
+          <span className="flex items-center gap-1.5 font-mono text-xs text-fg-subtle">
             <Clock3 size={12} strokeWidth={1.8} aria-hidden />
             {live ? (
               <>
@@ -184,7 +184,7 @@ export function AgentSessionCard({
       </dl>
 
       {running && (
-        <p className="mt-4 text-[11px] leading-relaxed text-fg-muted">
+        <p className="mt-4 text-xs leading-relaxed text-fg-muted">
           {vault === null
             ? "No live cash figure for this session right now: the vault did not answer, or it has already moved past this session on chain. The opening NAV above is the level it settles against."
             : "touchedCount() is the vault's redeem list, not a tally for this session — it can include carryover from an earlier one."}
@@ -223,7 +223,7 @@ export function AgentSessionCard({
         </p>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-line pt-4 font-mono text-[10px] text-fg-subtle">
+      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-line pt-4 font-mono text-xs text-fg-subtle">
         {session.metaMarketId ? (
           // Meta-markets are native DreamDEX Event Contracts, so the contract
           // page already reads, quotes and trades them with no changes.

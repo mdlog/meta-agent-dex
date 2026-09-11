@@ -216,7 +216,7 @@ export function OverviewMarkets({ rows }: { rows: MetaMarketRow[] }) {
               outcome tokens reads below its own baseline and a colour here
               would call that a loss. */}
           <div className="mb-5 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-t border-line pt-4">
-            <span className="text-[11px] text-fg-muted">
+            <span className="text-xs text-fg-muted">
               <span className="muted-label">Vault cash</span>{" "}
               <span className="num font-mono text-fg">{usdc(feature.vault?.cash ?? null)}</span>
               {" / "}
@@ -233,7 +233,7 @@ export function OverviewMarkets({ rows }: { rows: MetaMarketRow[] }) {
                 a panel headed SESSION 03. So it is labelled for the list it
                 counts, not for the session it sits beside. */}
             {feature.vault !== null && (
-              <span className="text-[11px] text-fg-subtle">
+              <span className="text-xs text-fg-subtle">
                 <span className="mono">touched()</span> holds {feature.vault.touchedCount}{" "}
                 {feature.vault.touchedCount === 1 ? "market" : "markets"}
               </span>
