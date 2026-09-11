@@ -489,7 +489,14 @@ export function AgentProfile({ slug }: { slug: string }) {
         </section>
       </div>
 
-      <div className="mt-9 space-y-9">
+      {/* `gap`, not `space-y`. The NAV chart's root is a <figure>, which carries
+          a 1em/40px margin from the browser, so AgentNavChart kills it with
+          `m-0`. Tailwind v4 compiles `space-y-*` inside `:where()` — zero
+          specificity — so that `m-0` won, the 36px vanished, and the SESSIONS
+          heading sat flush against the chart's bottom border. A gap belongs to
+          the container anyway: a child should not be able to delete its
+          parent's spacing by minding its own margins. */}
+      <div className="mt-9 flex flex-col gap-9">
         <AgentNavChart points={nav} baseline={live?.navT0 ?? closed[0]?.navT0 ?? null} />
 
         {/* One section, three views of the same subject.
