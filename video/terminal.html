@@ -1,0 +1,63 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>terminal</title>
+<style>
+  :root { --bg:#0D1118; --panel:#0A0E14; --line:#242B35; --fg:#F0F3EC; --muted:#78868F; --dim:#9AA6AC; --cyan:#61D8E8; --amber:#F2C14E; --red:#F0685E; --green:#7BD88F; }
+  html, body { margin:0; width:1920px; height:1080px; background:var(--bg); color:var(--fg); overflow:hidden;
+    font: 22px/1.5 "IBM Plex Mono", "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, monospace; }
+  .panes { display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:24px; padding:40px; height:1080px; box-sizing:border-box; }
+  .pane { background:var(--panel); border:1px solid var(--line); border-radius:10px; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+  .bar { display:flex; align-items:center; gap:10px; padding:12px 18px; border-bottom:1px solid var(--line); color:var(--dim); font-size:18px; flex:none; }
+  .dot { width:12px; height:12px; border-radius:50%; background:var(--line); flex:none; }
+  .dot:nth-child(1) { background:#F0685E } .dot:nth-child(2) { background:#F2C14E } .dot:nth-child(3) { background:#7BD88F }
+  .title { margin-left:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .body { padding:16px 20px; overflow:hidden; flex:1; display:flex; flex-direction:column; justify-content:flex-end; }
+  .l { white-space:pre-wrap; word-break:break-word; opacity:0; transform:translateY(4px); transition:opacity .18s ease, transform .18s ease; margin:2px 0; }
+  .l.on { opacity:1; transform:none; }
+  .ts { color:var(--muted); } .lv { font-weight:700; } .lv.info { color:var(--cyan); } .lv.warn { color:var(--amber); } .lv.error { color:var(--red); }
+  .k { color:var(--fg); font-weight:700; } .key { color:var(--dim); } .val { color:var(--fg); } .q { color:var(--green); }
+  .cursor { display:inline-block; width:11px; height:24px; background:var(--fg); vertical-align:-4px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0 } }
+</style>
+<div class="panes" id="panes"></div>
+<script>
+  const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  // key=value pairs; quoted values in green, the way the eye reads logfmt.
+  function fmtRest(rest) {
+    return esc(rest).replace(/(\S+?)=("[^"]*"|\S+)/g, (_, k, v) =>
+      `<span class="key">${k}=</span><span class="${v.startsWith('"') ? "q" : "val"}">${v}</span>`);
+  }
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  window.render = async ({ panes, intervalMs = 350 }) => {
+    const root = document.getElementById("panes");
+    root.innerHTML = "";
+    const bodies = panes.map((p) => {
+      const el = document.createElement("div");
+      el.className = "pane";
+      el.innerHTML = `<div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">${esc(p.title)}</span></div><div class="body"></div>`;
+      root.appendChild(el);
+      const body = el.querySelector(".body");
+      body.innerHTML = `<div class="l on"><span class="ts">$</span> ${esc(p.title)}</div>`;
+      return body;
+    });
+    const max = Math.max(...panes.map((p) => p.lines.length));
+    for (let i = 0; i < max; i++) {
+      panes.forEach((p, pi) => {
+        const l = p.lines[i];
+        if (!l) return;
+        const div = document.createElement("div");
+        div.className = "l";
+        div.innerHTML = `<span class="ts">${esc(l.ts)}</span> <span class="lv ${esc(l.level)}">${esc(l.level.padEnd(5))}</span> <span class="k">${esc(l.kind.padEnd(9))}</span> ${fmtRest(l.rest)}`;
+        bodies[pi].appendChild(div);
+        requestAnimationFrame(() => div.classList.add("on"));
+      });
+      await sleep(intervalMs);
+    }
+    bodies.forEach((b) => {
+      const c = document.createElement("div");
+      c.className = "l on";
+      c.innerHTML = '<span class="cursor"></span>';
+      b.appendChild(c);
+    });
+  };
+</script>
