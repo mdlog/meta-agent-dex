@@ -38,3 +38,7 @@ meta-agent-dex/
 # committed a funded key by doing exactly what the guide told them to.
 examples/**/.env
 examples/**/node_modules/
+
+# demo video pipeline outputs
+video/out/
+video/node_modules/
