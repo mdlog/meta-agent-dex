@@ -401,6 +401,48 @@ export function listTrades(sessionId: string, db: DatabaseSync = getDb()): Agent
     .map((r) => rowToTrade(r as Record<string, unknown>));
 }
 
+/** What one agent has done in total, across every session it has ever run. */
+export interface TradeHistory {
+  trades: number;
+  sessions: number;
+  /** Millisecond timestamp of the oldest trade, or null when there are none. */
+  firstAt: number | null;
+  lastAt: number | null;
+}
+
+/**
+ * The totals behind the tape.
+ *
+ * `listTrades` is scoped to one session because the profile draws one tape
+ * against one NAV curve, and merging sessions would put orders from one window
+ * under a heading about another. That is the right call for the tape and the
+ * wrong one for a reader deciding whether anything was kept: when a new session
+ * opens, the previous session's orders leave the screen, and a page that shows
+ * nothing else looks like a page that lost them.
+ *
+ * So this counts, rather than fetching. One aggregate instead of the
+ * hundred-thousand-row body the detail route's comment declines to serve.
+ */
+export function tradeHistory(agentId: string, db: DatabaseSync = getDb()): TradeHistory {
+  const r = db
+    .prepare(
+      `SELECT COUNT(*) AS trades,
+              COUNT(DISTINCT sessionId) AS sessions,
+              MIN(at) AS firstAt,
+              MAX(at) AS lastAt
+         FROM agent_trades
+        WHERE agentId = ?`,
+    )
+    .get(agentId) as { trades: number; sessions: number; firstAt: number | null; lastAt: number | null };
+
+  return {
+    trades: Number(r.trades),
+    sessions: Number(r.sessions),
+    firstAt: r.firstAt === null ? null : Number(r.firstAt),
+    lastAt: r.lastAt === null ? null : Number(r.lastAt),
+  };
+}
+
 function rowToNavPoint(r: Record<string, unknown>): AgentNavPoint {
   return {
     id: r.id as string,

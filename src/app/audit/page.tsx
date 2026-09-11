@@ -137,11 +137,31 @@ function LedgerRows({ lines }: { lines: readonly LedgerLine[] }) {
   );
 }
 
-export default function AuditPage() {
+export default async function AuditPage({
+  searchParams,
+}: {
+  /**
+   * `?agent=<slug>` narrows the live ledger to one agent.
+   *
+   * The profile page's tape is scoped to a single session, so it links here for
+   * the whole record — and a link promising "every trade this agent made" that
+   * lands on an unfiltered four-thousand-row page has not kept its promise.
+   * The verified trail above is never filtered: it is the project's own
+   * provenance, not any one agent's.
+   */
+  searchParams: Promise<{ agent?: string }>;
+}) {
+  const { agent: agentFilter } = await searchParams;
+
   // Straight through the service layer: this is the same journal
   // `/api/agents/sessions` serves, and a server component holding the database
   // handle has no reason to ask itself over HTTP for it.
-  const agents = listAgents();
+  const allAgents = listAgents();
+  // An unknown slug narrows to nothing rather than silently showing everything:
+  // a filter that fails open tells the reader they are looking at one agent
+  // while they are looking at eleven.
+  const focused = agentFilter ? allAgents.find((a) => a.slug === agentFilter) ?? null : null;
+  const agents = agentFilter ? (focused ? [focused] : []) : allAgents;
   const byId = new Map<string, Agent>(agents.map((a) => [a.id, a]));
   const sessions = agents.flatMap((a) => listSessions(a.id));
 
@@ -314,8 +334,20 @@ export default function AuditPage() {
           <strong>{fixedTx + liveTx}</strong>
           <span className="metric-delta neutral">
             {fixedTx} from the verified trail · {liveTx} from this deployment
+            {/* Said on the figure itself, not in a banner elsewhere. A filtered
+                count under an unqualified heading is the same number claiming
+                to be a different thing. */}
+            {focused !== null && ` · live rows narrowed to ${focused.name}`}
           </span>
         </div>
+
+        {agentFilter !== undefined && focused === null && (
+          <div className="callout callout-neutral">
+            No agent has the slug <span className="mono">{agentFilter}</span>, so the live ledger
+            below is empty. The verified trail is unaffected — it belongs to the project, not to any
+            one agent.
+          </div>
+        )}
         <div className="ledger-trust">
           <ShieldCheck size={19} strokeWidth={1.8} />
           <div>
@@ -411,6 +443,18 @@ export default function AuditPage() {
             </div>
             <LedgerRows lines={shown} />
           </div>
+        )}
+
+        {/* The cap, said out loud. It was documented in a comment and nowhere a
+            reader could see it, so a list of thirty under a count of thousands
+            invited the reading that thirty was all there was. */}
+        {live.length > shown.length && (
+          <p className="section-description">
+            Newest {shown.length} of {live.length.toLocaleString()} rows
+            {focused !== null && ` for ${focused.name}`}. The list is capped so a long-running
+            deployment does not turn this page into a scroll; the count above it is the full total,
+            and every row it omits is still on chain.
+          </p>
         )}
 
         <p className="section-description">

@@ -22,7 +22,7 @@
 
 import { json, fail } from "@/lib/http";
 import { getAgentBySlug } from "@/lib/services/agents";
-import { listSessions, listTrades, navSeries } from "@/lib/services/agentSessions";
+import { listSessions, listTrades, navSeries, tradeHistory } from "@/lib/services/agentSessions";
 import { getAdapter } from "@/lib/dreamdex";
 import { standings } from "@/lib/services/agentStandings";
 import { liveVaultForSession } from "@/lib/agents/vaultState";
@@ -125,6 +125,13 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
     sessions,
     tradesSessionId: focus?.id ?? null,
     trades,
+    /**
+     * Totals across every session, because the tape above is one session's.
+     * A visitor who arrives just after a new session opens sees an empty tape,
+     * and without this the page gives them no way to tell "nothing kept" from
+     * "nothing yet in this window".
+     */
+    tradeHistory: tradeHistory(agent.id),
     /** marketId -> how it settled. Absent means the read did not answer. */
     outcomes,
     nav: navSeries(agent.id, since),

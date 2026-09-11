@@ -524,6 +524,25 @@ export function AgentProfile({ slug }: { slug: string }) {
                     and paid out of the vault.
                     {tapeSession !== null && " This is one session's tape, not the agent's whole history."}
                     {trades.length > TAPE_LIMIT && ` Showing the ${TAPE_LIMIT} most recent.`}
+                    {/* The totals, because the tape above is one window and an
+                        empty one reads as a lost record rather than a new
+                        session. Every order ever signed is still in the journal
+                        and still on chain; this says so and links to it. */}
+                    {detail.tradeHistory.trades > 0 && (
+                      <>
+                        {" "}
+                        <strong className="text-fg">
+                          {detail.tradeHistory.trades.toLocaleString()} orders across{" "}
+                          {detail.tradeHistory.sessions.toLocaleString()}{" "}
+                          {detail.tradeHistory.sessions === 1 ? "session" : "sessions"}
+                        </strong>{" "}
+                        are kept in full.{" "}
+                        <Link href={`/audit?agent=${agent.slug}`} className="row-link hover:underline">
+                          Open the ledger for {agent.name}
+                        </Link>
+                        .
+                      </>
+                    )}
                     {/* Only while looking at a past session. The way back has to
                         be here rather than in the tab strip: the tab says which
                         VIEW is open, and this says which SESSION it is of. */}

@@ -62,6 +62,12 @@ export interface AgentDetail {
   trades: AgentTrade[];
   tradesSessionId: string | null;
   /**
+   * Totals across every session this agent has run, so a page showing one
+   * session's tape can say what it is a slice OF. Deliberately not named
+   * `history`: that key is already an accepted alias for the sessions array.
+   */
+  tradeHistory: { trades: number; sessions: number };
+  /**
    * How each traded market settled, keyed by marketId.
    *
    * A trade row cannot say on its own whether it won: every order is a buy, so
@@ -335,6 +341,12 @@ export async function loadAgent(
     sessions: pickTyped(payload, ["sessions", "history"], isSession),
     trades: pickTyped(payload, ["trades", "tape"], isTrade),
     tradesSessionId: envelope && str(envelope.tradesSessionId) ? envelope.tradesSessionId : null,
+    tradeHistory: {
+      // Absent or malformed counts as zero, which renders as no line at all
+      // rather than as "0 orders" under an agent that has traded.
+      trades: isRecord(envelope?.tradeHistory) && typeof envelope.tradeHistory.trades === "number" ? envelope.tradeHistory.trades : 0,
+      sessions: isRecord(envelope?.tradeHistory) && typeof envelope.tradeHistory.sessions === "number" ? envelope.tradeHistory.sessions : 0,
+    },
     nav: pickTyped(payload, ["nav", "navPoints", "navSeries"], isNavPoint),
     // `chain` only — `vault` is deliberately not in this key list any more.
     // The two shapes overlap enough that `toVaultReading` would accept a
